@@ -1,4 +1,11 @@
 # 구성
+## Project Directory
+- components : 재사용할 컴포넌트 (메뉴 등 화면 조각)  
+- modules : Redux  
+- pages : 화면 컴포넌트  
+- styles : css 등 스타일 제어  
+- utils : 공통 메서드  
+
 ## 목록
 - index.js : public/index.html 에서 root 에 렌더링  
 - App.js : index.js에 추가하는 root 컴포넌트  

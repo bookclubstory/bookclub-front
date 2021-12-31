@@ -2,14 +2,10 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { resetStore } from "~/modules/index";
-import Menu from "./Menu";
-import { isNotEmpty } from "~/utils/Valid";
 
 const Gnb = (props) => {
   const dispatch = useDispatch();
-
   const token = useSelector((state) => state.user.loginInfo.token);
-
   const gnbView = useSelector((state) => state.actionOfGlobal.gnbView);
 
   return (
@@ -60,25 +56,8 @@ const Gnb = (props) => {
                 Links
               </Link>
             </li>
-            {/* <li className="nav-item">
-                <a className="nav-link" href="#">
-                  Link
-                </a>
-              </li>
-              <li className="nav-item">
-                <a className="nav-link disabled">Disabled</a>
-              </li> */}
           </ul>
           <form className="d-flex">
-            {/* <input
-              className="form-control me-2"
-              type="search"
-              placeholder="Search"
-              aria-label="Search"
-            />
-            <button className="btn btn-outline-success" type="button">
-              Search
-            </button> */}
             <Link to="/login" className="nav-link" style={{color: "white"}}>Sign In</Link>
             <Link to="/signup" className="btn btn-outline-light">Sign up</Link>
           </form>
