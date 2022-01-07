@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import AxiosConfig from "~/utils/AxiosConfig";
+import axiosConfig from "~/utils/axiosConfig";
 import { AgGridReact } from "ag-grid-react";
-import { isNotEmpty } from "~/utils/Valid";
+import { isNotEmpty } from "~/utils/valid";
 import ActionRenderer from "~/pages/settings/roles/RoleListActionRenderer";
 import DeleteRoleModal from "~/pages/settings/roles/DeleteRoleModal";
 
@@ -50,7 +50,7 @@ const RoleList = (props) => {
       keyword = searchKeyword;
     }
 
-    AxiosConfig.get("/api/role/search", {
+    axiosConfig.get("/api/role/search", {
       params: {
         keyword: keyword,
       },

@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
-import AxiosConfig from "~/utils/AxiosConfig";
+import axiosConfig from "~/utils/axiosConfig";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
-import { isEmpty } from "~/utils/Valid";
+import { isEmpty } from "~/utils/valid";
 
 const MySwal = withReactContent(Swal);
 const ResetPasswordModal = (props) => {
@@ -32,7 +32,7 @@ const ResetPasswordModal = (props) => {
       return;
     }
 
-    AxiosConfig.put("/api/user/reset-password", {
+    axiosConfig.put("/api/user/reset-password", {
         password: fields["confirmResetPassword"],
     })
       .then(function (response) {

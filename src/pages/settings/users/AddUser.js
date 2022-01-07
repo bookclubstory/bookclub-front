@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import AxiosConfig from "~/utils/AxiosConfig";
+import axiosConfig from "~/utils/axiosConfig";
 import AsyncSelect from "react-select/async";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
@@ -122,7 +122,7 @@ const AddUser = (props) => {
 
     let convertIsActive = isActive === false ? 0 : 1;
 
-    AxiosConfig.post("/api/user", {
+    axiosConfig.post("/api/user", {
       firstName: firstName,
       lastName: lastName,
       username: username,

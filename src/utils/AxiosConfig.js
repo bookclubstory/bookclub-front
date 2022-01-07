@@ -1,8 +1,6 @@
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
-import { useSelector, useDispatch } from "react-redux";
 import { history } from "~/index";
-import { isEmpty } from "lodash";
 
 // First we need to import axios.js
 import axios from "axios";

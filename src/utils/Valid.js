@@ -1,4 +1,4 @@
-import AxiosConfig from "~/utils/AxiosConfig";
+import axiosConfig from "~/utils/axiosConfig";
 
 export const isEmpty = (str) => {
   if (typeof str === "undefined" || str === null || str === "") return true;
@@ -21,8 +21,8 @@ export const checkValidToken = () => {
   // 2. Check the request token
   let token = browserLoginInfo.token;
   if (isEmpty(token)) {
-    AxiosConfig.defaults.headers["x-auth-token"] = "";
+    axiosConfig.defaults.headers["x-auth-token"] = "";
   } else {
-    AxiosConfig.defaults.headers["x-auth-token"] = token;
+    axiosConfig.defaults.headers["x-auth-token"] = token;
   }
 };

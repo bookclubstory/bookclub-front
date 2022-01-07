@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import AxiosConfig from "~/utils/AxiosConfig";
+import axiosConfig from "~/utils/axiosConfig";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 
@@ -63,7 +63,7 @@ const Signup = (props) => {
       return;
     }
 
-    AxiosConfig.post("/api/user/register", {
+    axiosConfig.post("/api/user/register", {
       name: name,
       email: email,
       password: password,

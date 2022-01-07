@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useHistory } from "react-router-dom";
-import AxiosConfig from "~/utils/AxiosConfig";
+import axiosConfig from "~/utils/axiosConfig";
 import { useSelector, useDispatch } from "react-redux";
 import * as actions from "~/modules/login/user";
 
@@ -16,7 +16,7 @@ const Login = (props) => {
   const goLogin = () => {
     console.log("Login.js goLogin()...")
     //TODO api
-    AxiosConfig.post("/login", {
+    axiosConfig.post("/login", {
       username: loginUserName.current.value,
       password: loginUserPassword.current.value,
     })
@@ -53,7 +53,7 @@ const Login = (props) => {
             isActive: loginInfo.isActive,
           })
         );
-        AxiosConfig.defaults.headers["x-auth-token"] = response.data.token;
+        axiosConfig.defaults.headers["x-auth-token"] = response.data.token;
 
         history.push("/");
       })

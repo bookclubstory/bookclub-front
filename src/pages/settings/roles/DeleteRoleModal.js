@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import AxiosConfig from "~/utils/AxiosConfig";
+import axiosConfig from "~/utils/axiosConfig";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 
@@ -17,7 +17,7 @@ const DeleteRoleModal = (props) => {
     let role = props.role;
     let searchRoleList = props.searchRoleList;
 
-    AxiosConfig.delete("/api/role", {
+    axiosConfig.delete("/api/role", {
       params: {
         role: role,
       },

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import AxiosConfig from "~/utils/AxiosConfig";
+import axiosConfig from "~/utils/axiosConfig";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 
@@ -65,7 +65,7 @@ const EditUserProfile = (props) => {
   const saveUserInfo = () => {
     var regex = /[^0-9]/g;
 
-    AxiosConfig.put("/api/user/update", {
+    axiosConfig.put("/api/user/update", {
       firstName: firstName,
       lastName: lastName,
       tel: tel.replace(regex, ""),

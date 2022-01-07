@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import * as actions from "~/modules/dashboard/actionOfDashboard";
-import AxiosConfig from "~/utils/AxiosConfig";
+import axiosConfig from "~/utils/axiosConfig";
 import { AgGridReact } from "ag-grid-react";
 import ActionRenderer from "~/pages/dashboards/DashboardActionRenderer";
 import DeleteDashboardModal from "~/pages/dashboards/DeleteDashboardModal";
@@ -66,7 +66,7 @@ const Dashboard = (props) => {
       keyword = searchKeyword;
     }
 
-    AxiosConfig.get("/api/dashboard/search", {
+    axiosConfig.get("/api/dashboard/search", {
       params: {
         keyword: keyword,
       },

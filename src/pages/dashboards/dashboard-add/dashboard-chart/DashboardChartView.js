@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import AxiosConfig from "~/utils/AxiosConfig";
+import axiosConfig from "~/utils/axiosConfig";
 import { useSelector, useDispatch } from "react-redux";
 import * as chart from "~/modules/chart/datasetAndChartType";
 import * as actions from "~/modules/dashboard/dashboardChartView";
@@ -33,7 +33,7 @@ const DashboardChartView = (props) => {
 
   const drawChart = () => {
     //   TODO: draw chart by type
-    AxiosConfig.get("/api/chart/spec", {
+    axiosConfig.get("/api/chart/spec", {
       params: {
         chartId: chartId,
       },

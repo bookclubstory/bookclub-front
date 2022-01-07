@@ -3,8 +3,8 @@ import { Route, Switch, useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import * as actions from "~/modules/login/user";
 import * as actionOfGlobal from "~/modules/global/actionOfGlobal";
-import AxiosConfig from "~/utils/AxiosConfig";
-import { isEmpty, SynchroniseSession } from "~/utils/Valid";
+import axiosConfig from "~/utils/axiosConfig";
+import { isEmpty, SynchroniseSession } from "~/utils/valid";
 
 import Signup from "~/pages/login/Signup";
 import Login from "~/pages/login/Login";
@@ -19,11 +19,7 @@ import EditRole from "~/pages/settings/roles/EditRole";
 import UserProfile from "~/pages/settings/users/UserProfile";
 import EditUserProfile from "~/pages/settings/users/EditUserProfile";
 
-import Overview from "~/components/Overview";
-import BidNotice from "~/pages/data/bidnotice/BidNotice";
-import BeforeSpec from "~/pages/data/beforespec/BeforeSpec";
-import MeetUp from "~/pages/meetup/MeetUp";
-import Links from "~/pages/links/Links";
+import Bookclub from "~/pages/bookclub/Bookclub";
 
 const App = (props) => {
   const dispatch = useDispatch();
@@ -38,13 +34,12 @@ const App = (props) => {
     //   // Browser Local storage
     //   browserLoginInfo =
     //     JSON.parse(global.localStorage.getItem("loginInfo")) || {};
-
     //   if (Object.keys(storedLoginInfo).length === 0) {
     //     // redux store
     //     dispatch(actions.setLoginInfo(browserLoginInfo));
     //   } else {
     //     if (storedLoginInfo.token.length === 0) {
-    //       AxiosConfig.get("/logout")
+    //       axiosConfig.get("/logout")
     //         .then(function (response) {
     //           // success
     //           dispatch(actions.setLoginInfo({})); // initiate redux store
@@ -61,24 +56,23 @@ const App = (props) => {
     //     }
     //   }
     // }
-
     // // 2. Check the request token
     // let token = browserLoginInfo.token;
     // if (isEmpty(token)) {
     //   history.push("/login");
-    //   AxiosConfig.defaults.headers["x-auth-token"] = "";
+    //   axiosConfig.defaults.headers["x-auth-token"] = "";
     // } else {
-    //   AxiosConfig.defaults.headers["x-auth-token"] = token;
+    //   axiosConfig.defaults.headers["x-auth-token"] = token;
     // }
   }, []);
 
   useEffect(() => {
     function onKeyup(e) {
-      if(e.key === "Escape") {
+      if (e.key === "Escape") {
         dispatch(actionOfGlobal.setGnbMode("show"));
       }
     }
-    window.addEventListener('keyup', onKeyup);
+    window.addEventListener("keyup", onKeyup);
   });
 
   return (
@@ -94,25 +88,11 @@ const App = (props) => {
         <Route path="/roles/edit/:role" component={EditRole} />
         <Route path="/users/profile/userinfo" component={UserProfile} />
         <Route path="/users/profile/edit" component={EditUserProfile} />
-        <Route path="/overview" component={Overview} />
-        <Route path="/bidnotice/list" component={BidNotice} />
-        <Route path="/beforespec/list" component={BeforeSpec} />
-        <Route path="/meetup/list" component={MeetUp} />
-        <Route path="/links/list" component={Links} />
         <Route path="/signup" component={Signup} />
+        <Route path="/bookclub/list" component={Bookclub} />
       </Switch>
     </div>
   );
 };
-
-//export default App;
-const mapStateToProps = (state) => ({
-  loginInfo: state.user.loginInfo,
-  gnbView: state.actionOfGlobal.gnbView,
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  setLoginInfo: (data) => dispatch(actions.setLoginInfo(data)),
-});
 
 export default App;
