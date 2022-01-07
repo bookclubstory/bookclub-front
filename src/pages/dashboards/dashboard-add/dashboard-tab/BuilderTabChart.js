@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import AxiosConfig from "~/utils/AxiosConfig";
+import axiosConfig from "~/utils/axiosConfig";
 import _ from "lodash";
 
 export const BuilderTabChart = (props) => {
@@ -15,7 +15,7 @@ export const BuilderTabChart = (props) => {
         keyword = "";
     }
 
-    AxiosConfig.get("/api/chart/dashboard-component/search", {
+    axiosConfig.get("/api/chart/dashboard-component/search", {
       params: {
         keyword: keyword,
       },

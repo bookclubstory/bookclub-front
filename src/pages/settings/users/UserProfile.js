@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import ResetPasswordModal from "~/pages/settings/users/ResetPasswordModal";
-import { isNotEmpty } from "~/utils/Valid";
+import { isNotEmpty } from "~/utils/valid";
 
 const UserProfile = (props) => {
   const history = useHistory();

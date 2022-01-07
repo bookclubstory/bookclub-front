@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import AxiosConfig from "~/utils/AxiosConfig";
+import axiosConfig from "~/utils/axiosConfig";
 import * as actions from "~/modules/dashboard/actionOfDashboard";
 import _ from "lodash";
 import "react-grid-layout/css/styles.css";
@@ -71,7 +71,7 @@ const DashboardContentGridContainer = (props) => {
   }
 
   function setGridItemsByDashboardId(dashboardId) {
-    AxiosConfig.get("/api/dashboard/" + dashboardId)
+    axiosConfig.get("/api/dashboard/" + dashboardId)
       .then(function (response) {
         // success
         setGridItemCount(response.data.count);

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useHistory, useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import AxiosConfig from "~/utils/AxiosConfig";
+import axiosConfig from "~/utils/axiosConfig";
 import AsyncSelect from "react-select/async";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
@@ -26,7 +26,7 @@ const EditRole = (props) => {
   }, []);
 
   const getUserListByRole = (role) => {
-    AxiosConfig.get("/api/role/users", {
+    axiosConfig.get("/api/role/users", {
       params: {
         role: role,
       },
@@ -52,7 +52,7 @@ const EditRole = (props) => {
   };
 
   const getUserDetails = (userId) => {
-    AxiosConfig.get("/api/user/detail", {
+    axiosConfig.get("/api/user/detail", {
       params: {
         username: userId,
       },
@@ -111,7 +111,7 @@ const EditRole = (props) => {
     });
 
     //TODO:
-    // AxiosConfig.put("/api/role", {
+    // axiosConfig.put("/api/role", {
     //   role: roleName,
     //   permissions: permissions,
     //   users: users,

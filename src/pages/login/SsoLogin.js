@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useHistory, useParams } from "react-router-dom";
-import AxiosConfig from "~/utils/AxiosConfig";
+import axiosConfig from "~/utils/axiosConfig";
 import { useSelector, useDispatch } from "react-redux";
 import * as actions from "~/modules/login/user";
 
@@ -18,7 +18,7 @@ const SsoLogin = (props) => {
   const goSsoLogin = () => {
     console.log("SsoLogin.js goSsoLogin()...")
     //TODO api
-    AxiosConfig.post("/login", {
+    axiosConfig.post("/login", {
       username: username,
       token: token,
     })
@@ -47,7 +47,7 @@ const SsoLogin = (props) => {
             token: loginInfo.token,
           })
         );
-        AxiosConfig.defaults.headers["x-auth-token"] = response.data.token;
+        axiosConfig.defaults.headers["x-auth-token"] = response.data.token;
 
         history.push("/");
       })

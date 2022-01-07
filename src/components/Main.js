@@ -3,9 +3,9 @@ import { useSelector, useDispatch } from "react-redux";
 import * as actionOfUser from "~/modules/global/actionOfUser";
 import * as actionOfCode from "~/modules/global/actionOfCode";
 import { Link, useHistory } from "react-router-dom";
-import AxiosConfig from "~/utils/AxiosConfig";
+import axiosConfig from "~/utils/axiosConfig";
 import _, { set } from "lodash";
-import { isNotEmpty, isEmpty, checkValidToken } from "~/utils/Valid";
+import { isNotEmpty, isEmpty, checkValidToken } from "~/utils/valid";
 
 const Main = (props) => {
   const dispatch = useDispatch();
@@ -19,7 +19,7 @@ const Main = (props) => {
   }, []);
 
   const getRoleList = () => {
-    AxiosConfig.get("/api/role/list")
+    axiosConfig.get("/api/role/list")
       .then(function (response) {
         // success
         //setRoleOptions(response.data);
@@ -45,7 +45,7 @@ const Main = (props) => {
   };
 
   const getUserList = () => {
-    AxiosConfig.get("/api/user/list")
+    axiosConfig.get("/api/user/list")
       .then(function (response) {
         // success
         let userOptions = [];

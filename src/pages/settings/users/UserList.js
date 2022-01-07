@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import AxiosConfig from "~/utils/AxiosConfig";
+import axiosConfig from "~/utils/axiosConfig";
 import { AgGridReact } from "ag-grid-react";
-import { isNotEmpty } from "~/utils/Valid";
+import { isNotEmpty } from "~/utils/valid";
 import ActionRenderer from "~/pages/settings/users/UserListActionRenderer";
 import DeleteUserModal from "~/pages/settings/users/DeleteUserModal";
 
@@ -58,7 +58,7 @@ const UserList = (props) => {
       keyword = searchKeyword;
     }
 
-    AxiosConfig.get("/api/user/search", {
+    axiosConfig.get("/api/user/search", {
       params: {
         keyword: keyword,
       },

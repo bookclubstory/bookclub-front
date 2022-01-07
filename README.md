@@ -24,5 +24,5 @@ Backend는 https://github.com/bookclubstory/bookclub-back 를 참고해주세요
 
 ## Crew
 - 권용희 : 기획 & 개발 @[konsent](https://github.com/konsent)
-- 손소라 : 개발 @[ssr03](https://github.com/ssr03)
+- 손소라 : 풀스택 개발 @[ssr03](https://github.com/ssr03)
 - 윤종현 : PM & 개발 @[kindvictor](https://github.com/kindvictor)

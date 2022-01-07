@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import AxiosConfig from "~/utils/AxiosConfig";
+import axiosConfig from "~/utils/axiosConfig";
 import * as actions from "~/modules/dashboard/actionOfDashboard";
 import { resetStore } from "~/modules/index";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
-import { isNotEmpty } from "~/utils/Valid";
+import { isNotEmpty } from "~/utils/valid";
 
 const MySwal = withReactContent(Swal);
 
@@ -37,7 +37,7 @@ const DashboardHeader = (props) => {
   useEffect(() => {
     if (isNotEmpty(dashboardId)) {
       // set dashboardTitle
-      AxiosConfig.get("/api/dashboard/title", {
+      axiosConfig.get("/api/dashboard/title", {
         params: {
           dashboardId: dashboardId,
         },
@@ -122,7 +122,7 @@ const DashboardHeader = (props) => {
     });
     //console.log(rglLayoutList);
 
-    AxiosConfig.post("/api/dashboard", {
+    axiosConfig.post("/api/dashboard", {
       dashboardId: dashboardId,
       dashboardTitle: dashboardTitle,
       dashboardLayout: rglLayoutList,

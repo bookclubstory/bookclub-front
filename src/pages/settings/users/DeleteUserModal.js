@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import AxiosConfig from "~/utils/AxiosConfig";
+import axiosConfig from "~/utils/axiosConfig";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 
@@ -17,7 +17,7 @@ const DeleteUserModal = (props) => {
     let username = props.username;
     let searchUserList = props.searchUserList;
 
-    AxiosConfig.delete("/api/user", {
+    axiosConfig.delete("/api/user", {
       params: {
         username: username,
       },
