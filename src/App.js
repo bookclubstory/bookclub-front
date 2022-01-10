@@ -19,7 +19,7 @@ import EditRole from "~/pages/settings/roles/EditRole";
 import UserProfile from "~/pages/settings/users/UserProfile";
 import EditUserProfile from "~/pages/settings/users/EditUserProfile";
 
-import Bookclub from "~/pages/bookclub/Bookclub";
+import BookclubList from "~/pages/bookclub/BookclubList";
 
 const App = (props) => {
   const dispatch = useDispatch();
@@ -89,7 +89,7 @@ const App = (props) => {
         <Route path="/users/profile/userinfo" component={UserProfile} />
         <Route path="/users/profile/edit" component={EditUserProfile} />
         <Route path="/signup" component={Signup} />
-        <Route path="/bookclub/list" component={Bookclub} />
+        <Route path="/bookclub/list" component={BookclubList} />
       </Switch>
     </div>
   );
