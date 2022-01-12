@@ -24,6 +24,10 @@ const Signup = (props) => {
     const { name, value } = event.target;
     let formValue = value;
 
+    if (name === "name") {
+      formValue = formValue.toLowerCase();
+    }
+
     if (name === "password" || name === "confirmPassword") {
       let currPassword = "";
       let currConfirmPassword = "";
@@ -63,8 +67,8 @@ const Signup = (props) => {
       return;
     }
 
-    axiosConfig.post("/api/user/register", {
-      name: name,
+    axiosConfig.post("/api/user/signup", {
+      username: name.toLowerCase(),
       email: email,
       password: password,
     })
@@ -81,7 +85,7 @@ const Signup = (props) => {
         //alert("Failed to save this Dataset.");
         MySwal.fire({
           icon: "error",
-          text: "Failed to registration.",
+          text: "Failed to Signup.",
         });
       })
       .then(function () {
@@ -151,13 +155,12 @@ const Signup = (props) => {
                         className="link-dark mb-4 font-sans-serif fs-4 d-inline-block fw-bolder"
                         to="/"
                       >
-                        KONEPS
+                        My Bookclub
                       </Link>
                       <p className="opacity-75 text-black">
                         저희 서비스에 머무르시는 동안,
                         <br />
-                        KONEPS에서 공공 소프트웨어 프로젝트에 대한 인사이트를
-                        얻어가세요!
+                        쉽고 간편하게 북클럽을 개설하고 참여해보세요!
                       </p>
                     </div>
                   </div>
@@ -169,14 +172,14 @@ const Signup = (props) => {
                         className="btn btn-outline-dark mt-2 px-4"
                         to="/login"
                       >
-                        Log In
+                        Sign In
                       </Link>
                     </p>
                   </div>
                 </div>
                 <div className="col-md-7 d-flex flex-center">
                   <div className="p-4 p-md-5 flex-grow-1">
-                    <h3>Register</h3>
+                    <h3>Sign Up</h3>
                     <form>
                       <div className="mb-3">
                         <label className="form-label" for="name">
