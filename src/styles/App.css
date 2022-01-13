@@ -37,6 +37,11 @@
   }
 }
 
+/* Show it is fixed to the top */
+body {
+  min-height: 55rem;
+  padding-top: 3.5rem;
+}
 body {
   font-size: .875rem;
 }
@@ -47,10 +52,17 @@ body {
   vertical-align: text-bottom;
 }
 
+/* Signup */
+.flex-center {
+  -webkit-box-align: center;
+  /* align-items: center; */
+  -webkit-box-pack: center;
+  justify-content: center;
+}
+
 /*
  * Navbar
  */
-
  .navbar-brand {
   padding-top: .75rem;
   padding-bottom: .75rem;
