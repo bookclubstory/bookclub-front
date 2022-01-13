@@ -9,7 +9,7 @@ Backend는 https://github.com/bookclubstory/bookclub-back 를 참고해주세요
 - 마이 페이지 : 개인 프로필, 참여중인 북클럽 정보, 작성한 독서로그, 북마크한 도서 정보
 
 ## 기술 스택
-- Frontend : React.js
+- Frontend : React + TypeScript
 - Backend : Spring boot, JPA
 - DB : PostgreSQL
 - Session : Redis
