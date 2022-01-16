@@ -37,11 +37,9 @@ const Bookclub = (props: any) => {
       });
   };
 
-  const drawElement = (el: string) => {
-    return "<div>" + el + "</div>"
-  }
   return (
     <div>
+      {clubList.map((element) => <div>{element}</div>)}
     </div>
   );
 };
