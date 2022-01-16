@@ -6,13 +6,13 @@ import * as actions from "@modules/bookclub/actionOfBookclub";
 import axiosConfig from "@utils/axiosConfig";
 import { isNotEmpty, isEmpty } from "@utils/valid";
 
-interface variable1 {
-  variable1: string
+interface ClubList {
+  clubList: string[],
 }
 const Bookclub = (props: any) => {
   let navigate = useNavigate();
   const dispatch = useDispatch();
-  const [variable1, setVariable1] = useState<variable1>();
+  const [clubList, setClubList] = useState<ClubList["clubList"]>(["A", "B", "C"]);
 
   useEffect(() => {
     // 컴포넌트 로드시 1번 실행
@@ -27,7 +27,7 @@ const Bookclub = (props: any) => {
     })
       .then(function (response: any) {
         // success
-        setVariable1(response.data);
+        setClubList(response.data.clubList);
       })
       .catch(function (error: any) {
         // error
@@ -36,8 +36,12 @@ const Bookclub = (props: any) => {
         // finally
       });
   };
+
+  const drawElement = (el: string) => {
+    return "<div>" + el + "</div>"
+  }
   return (
-    <div>      
+    <div>
     </div>
   );
 };

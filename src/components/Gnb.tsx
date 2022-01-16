@@ -36,8 +36,13 @@ const Gnb = (props: any) => {
               </Link>
             </li>
             <li className="nav-item">
-              <Link to="/biz/list" className="nav-link active">
-                Business
+              <Link to="/bookclub/list" className="nav-link active">
+                북클럽
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link to="/bookpost/list" className="nav-link active">
+                독서로그
               </Link>
             </li>
           </ul>

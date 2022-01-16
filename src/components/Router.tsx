@@ -13,6 +13,8 @@ import EditUserProfile from "@pages/settings/users/EditUserProfile";
 import RoleList from "@pages/settings/roles/RoleList";
 import EditRole from "@pages/settings/roles/EditRole";
 
+import BookclubList from "@pages/bookclub/BookclubList";
+
 const Router = (props: any) => {
   return (
     <Routes>
@@ -26,6 +28,7 @@ const Router = (props: any) => {
       <Route path="/users/profile/userinfo" element={<UserProfile />} />
       <Route path="/users/profile/edit" element={<EditUserProfile />} />
       <Route path="/signup" element={<Signup />} />
+      <Route path="/bookclub/list" element={<BookclubList />} />
     </Routes>
   );
 };
