@@ -12,12 +12,28 @@ interface ClubList {
 const Bookclub = (props: any) => {
   let navigate = useNavigate();
   const dispatch = useDispatch();
-  const [clubList, setClubList] = useState<ClubList["clubList"]>(["A", "B", "C"]);
+  const [clubList, setClubList] = useState<ClubList["clubList"]>(["클럽1", "클럽2", "클럽3"]);
 
   useEffect(() => {
     // 컴포넌트 로드시 1번 실행
     getBookclubList("");
   }, []);
+
+  const mainImg = {
+    user: {
+      name:'mainpageImg',
+      mainImgUrl : 'https://as2.ftcdn.net/v2/jpg/03/00/94/69/1000_F_300946931_kSR84OqudEhsmBZH47HU6ud7aZIDMjEx.jpg'
+    }
+  }
+
+  function SetMainImage(props: any) {
+    return (
+      <img
+      className="mainImg"
+      src={mainImg.user.mainImgUrl}
+      alt={mainImg.user.name}/>
+    );
+  }
 
   const getBookclubList = (keyword: string) => {
     axiosConfig.get("/api/v1/bookclub/list", {
@@ -39,6 +55,12 @@ const Bookclub = (props: any) => {
 
   return (
     <div>
+      <SetMainImage
+      />
+      <div>
+        <h3></h3>
+        <h3>이 달의 추천 모임</h3>
+      </div>
       {clubList.map((element) => <div>{element}</div>)}
     </div>
   );
