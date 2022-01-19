@@ -2,57 +2,35 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { ReducerType, resetStore } from "@modules/index";
+import {Container, Search, Icon, } from 'semantic-ui-react';
 
 const Gnb = (props: any) => {
   const dispatch = useDispatch();
   const token = useSelector((state: ReducerType) => state.session.loginInfo.token);
 
   return (
-    <nav className="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-      <div className="container-fluid">
-        <Link
-          to="/"
-          className="navbar-brand"
-          onClick={() => dispatch(resetStore())}
-        >
-          ILJIN
-        </Link>
-        <button
-          className="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarCollapse"
-          aria-controls="navbarCollapse"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span className="navbar-toggler-icon"></span>
-        </button>
-        <div className="collapse navbar-collapse" id="navbarCollapse">
-          <ul className="navbar-nav me-auto mb-2 mb-md-0">
-            <li className="nav-item">
-              <Link to="/overview" className="nav-link active">
-                Overview
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link to="/bookclub/list" className="nav-link active">
-                북클럽
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link to="/bookpost/list" className="nav-link active">
-                독서로그
-              </Link>
-            </li>
-          </ul>
-          <form className="d-flex">
-            <Link to="/login" className="nav-link" style={{color: "white"}}>Sign In</Link>
-            <Link to="/signup" className="btn btn-outline-light">Sign up</Link>
-          </form>
-        </div>
-      </div>
-    </nav>
+        <nav className="ui large inverted top fixed menu">
+            <Container fluid>
+                <Link
+                  to="/"
+                  className="header item"
+                  onClick={() => dispatch(resetStore())}>
+                  <Icon name='book'/>
+                  우동북
+                </Link>
+                <div className='item'>
+                  <Search></Search>
+                </div>
+
+                <div className='right item'>
+                  <Link to="/overview" className="item">Overview</Link>
+                  <Link to="/bookclub/list" className="item">북클럽</Link>
+                  <Link to="/bookpost/list" className="item">독서로그</Link>
+                  <Link to="/login" className="ui button" >Log in</Link>
+                  <Link to="/signup" className="ui button" style={{ marginLeft: '0.5em' }}>Sign Up</Link>
+                </div>
+            </Container>
+        </nav>
   );
 };
 

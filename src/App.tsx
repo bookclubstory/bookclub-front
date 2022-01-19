@@ -12,6 +12,7 @@ import "@styles/App.css";
 
 import Gnb from "@components/Gnb";
 import Router from "@components/Router";
+import Footer from "@components/Footer";
 
 const middlewares = [logger];
 const store = createStore(
@@ -34,6 +35,7 @@ const App = (props: any) => {
           <Provider store={store}>
             <Gnb />
             <Router />
+            <Footer />
           </Provider>
         </BrowserRouter>
       </SessionContext.Provider>
