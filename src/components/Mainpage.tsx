@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useContext } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { Link as RouterLink, useNavigate } from "react-router-dom";
 import * as actionOfUser from "@modules/user/actionOfUser";
 import * as actionOfSettings from "@modules/system/actionOfSettings";
 import axiosConfig from "@utils/axiosConfig";
@@ -114,9 +114,9 @@ const Main = (props: any) => {
                   회원가입하시고 지금 바로 MeetUp에 참여해보세요!!
                 </p>
                 <p>
-                  <Link className="btn btn-lg btn-primary" to="/signup">
+                  <RouterLink className="btn btn-lg btn-primary" to="/signup">
                     Sign up today
-                  </Link>
+                  </RouterLink>
                 </p>
               </div>
             </div>
@@ -228,9 +228,9 @@ const Main = (props: any) => {
               text below the carousel. This is the first column.
             </p>
             <p>
-              <Link className="btn btn-secondary" to="#">
+              <RouterLink className="btn btn-secondary" to="#">
                 View details »
-              </Link>
+              </RouterLink>
             </p>
           </div>
           {/* <!-- /.col-lg-4 --> */}
@@ -258,9 +258,9 @@ const Main = (props: any) => {
               time, we've moved on to the second column.
             </p>
             <p>
-              <Link className="btn btn-secondary" to="#">
+              <RouterLink className="btn btn-secondary" to="#">
                 View details »
-              </Link>
+              </RouterLink>
             </p>
           </div>
           {/* <!-- /.col-lg-4 --> */}
@@ -288,9 +288,9 @@ const Main = (props: any) => {
               content.
             </p>
             <p>
-              <Link className="btn btn-secondary" to="#">
+              <RouterLink className="btn btn-secondary" to="#">
                 View details »
-              </Link>
+              </RouterLink>
             </p>
           </div>
           {/* <!-- /.col-lg-4 --> */}
@@ -400,23 +400,9 @@ const Main = (props: any) => {
             </svg>
           </div>
         </div>
-
-        <hr className="featurette-divider" />
-
         {/* <!-- /END THE FEATURETTES --> */}
       </div>
       {/* <!-- /.container --> */}
-
-      {/* <!-- FOOTER --> */}
-      <footer className="container">
-        <p className="float-end">
-          <Link to="/">Back to top</Link>
-        </p>
-        <p>
-          © 2021 Jonghyun, Inc. · <Link to="#">Privacy</Link> ·{" "}
-          <Link to="#">Terms</Link>
-        </p>
-      </footer>
     </main>
   );
 };
