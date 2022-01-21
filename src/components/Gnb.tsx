@@ -1,58 +1,125 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link} from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { ReducerType, resetStore } from "@modules/index";
+import {alpha, AppBar, Box, Button, IconButton, InputBase, styled, Tab, Toolbar, Typography} from "@mui/material";
+import AutoStoriesIcon from '@mui/icons-material/AutoStories';
+import SearchIcon from '@mui/icons-material/Search';
+
+const Search = styled('div')(({ theme }) => ({
+    position: 'relative',
+    borderRadius: theme.shape.borderRadius,
+    backgroundColor: alpha(theme.palette.common.white, 0.15),
+    '&:hover': {
+        backgroundColor: alpha(theme.palette.common.white, 0.25),
+    },
+    marginRight: theme.spacing(2),
+    marginLeft: 0,
+    width: '100%',
+    [theme.breakpoints.up('sm')]: {
+        marginLeft: theme.spacing(3),
+        width: 'auto',
+    },
+}));
+
+const SearchIconWrapper = styled('div')(({ theme }) => ({
+    padding: theme.spacing(0, 2),
+    height: '100%',
+    position: 'absolute',
+    pointerEvents: 'none',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+}));
+
+const StyledInputBase = styled(InputBase)(({ theme }) => ({
+    color: 'inherit',
+    '& .MuiInputBase-input': {
+        padding: theme.spacing(1, 1, 1, 0),
+        // vertical padding + font size from searchIcon
+        paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+        transition: theme.transitions.create('width'),
+        width: '100%',
+        [theme.breakpoints.up('md')]: {
+            width: '20ch',
+        },
+    },
+}));
 
 const Gnb = (props: any) => {
   const dispatch = useDispatch();
   const token = useSelector((state: ReducerType) => state.session.loginInfo.token);
 
   return (
-    <nav className="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-      <div className="container-fluid">
-        <Link
-          to="/"
-          className="navbar-brand"
-          onClick={() => dispatch(resetStore())}
-        >
-          ILJIN
-        </Link>
-        <button
-          className="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarCollapse"
-          aria-controls="navbarCollapse"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span className="navbar-toggler-icon"></span>
-        </button>
-        <div className="collapse navbar-collapse" id="navbarCollapse">
-          <ul className="navbar-nav me-auto mb-2 mb-md-0">
-            <li className="nav-item">
-              <Link to="/overview" className="nav-link active">
-                Overview
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link to="/bookclub/list" className="nav-link active">
-                북클럽
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link to="/bookpost/list" className="nav-link active">
-                독서로그
-              </Link>
-            </li>
-          </ul>
-          <form className="d-flex">
-            <Link to="/login" className="nav-link" style={{color: "white"}}>Sign In</Link>
-            <Link to="/signup" className="btn btn-outline-light">Sign up</Link>
-          </form>
-        </div>
-      </div>
-    </nav>
+      <React.Fragment>
+          <AppBar
+              position="fixed"
+              elevation={0}
+              sx={{ borderBottom: (theme) => `1px solid ${theme.palette.divider}`,bgcolor: 'text.primary' }}
+          >
+              <Toolbar sx={{ flexWrap: 'wrap' }}>
+                  <AutoStoriesIcon sx={{ my: 1, mx: 1 }}></AutoStoriesIcon>
+                  <Typography variant="h6" color="inherit" noWrap sx={{ display: { xs: 'none', sm: 'block' } }} >
+                    <Link
+                       to="/"
+                       style={{textDecoration:'none',color: "white"}}
+                       onClick={() => dispatch(resetStore())}
+                      >
+                        우동북
+                    </Link>
+                  </Typography>
+
+                  <Search>
+                      <SearchIconWrapper>
+                          <SearchIcon />
+                      </SearchIconWrapper>
+                      <StyledInputBase
+                          placeholder="Search…"
+                          inputProps={{ 'aria-label': 'search' }}
+                      />
+                  </Search>
+
+                  <Box sx={{ flexGrow: 1 }} />
+                  <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+                      <Button
+                          sx={{ my: 2, color: 'white', display: 'block' }}
+                          component ={Link}
+                          to={"/overview"}
+                          >
+                          Overview
+                      </Button>
+                      <Button
+                          sx={{ my: 2, color: 'white', display: 'block' }}
+                          component ={Link}
+                          to={"/bookclub/list"}>
+                          북클럽
+                      </Button>
+                      <Button
+                          sx={{ my: 2, color: 'white', display: 'block' }}
+                          component ={Link}
+                          to={"/bookpost/list"}>
+                          독서로그
+                      </Button>
+                      <Button
+                          color="inherit"
+                          variant="outlined"
+                          sx={{ my: 1, mx: 1 }}
+                          component ={Link}
+                          to={"/login"}>
+                          Log in
+                      </Button>
+                      <Button
+                          color="inherit"
+                          variant="outlined"
+                          sx={{ my: 1, mx: 1 }}
+                          component = {Link}
+                          to={"/signup"}>
+                          Sign Up
+                      </Button>
+                  </Box>
+              </Toolbar>
+          </AppBar>
+      </React.Fragment>
   );
 };
 
