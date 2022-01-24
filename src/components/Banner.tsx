@@ -1,7 +1,7 @@
 import {Box, Grid, Paper, Typography} from "@mui/material";
 
-interface MainImageProps {
-    post: {
+interface BannerProps {
+    banner: {
         image: string;
         imageText: string;
         title: string;
@@ -9,8 +9,8 @@ interface MainImageProps {
     };
 }
 
-const MainImage = (props: MainImageProps) =>{
-    const { post } = props;
+const Banner = (props: BannerProps) =>{
+    const { banner } = props;
 
     return (
         <Paper
@@ -22,11 +22,11 @@ const MainImage = (props: MainImageProps) =>{
                 backgroundSize: 'cover',
                 backgroundRepeat: 'no-repeat',
                 backgroundPosition: 'center',
-                backgroundImage: `url(${post.image})`,
+                backgroundImage: `url(${banner.image})`,
             }}
         >
             {/* Increase the priority of the hero background image */}
-            {<img style={{ display: 'none' }} src={post.image} alt={post.imageText} />}
+            {<img style={{ display: 'none' }} src={banner.image} alt={banner.imageText} />}
             <Box
                 sx={{
                     position: 'absolute',
@@ -47,10 +47,10 @@ const MainImage = (props: MainImageProps) =>{
                         }}
                     >
                         <Typography component="h1" variant="h3" color="inherit" gutterBottom>
-                            {post.title}
+                            {banner.title}
                         </Typography>
                         <Typography variant="h5" color="inherit" paragraph>
-                            {post.description}
+                            {banner.description}
                         </Typography>
                     </Box>
                 </Grid>
@@ -59,4 +59,4 @@ const MainImage = (props: MainImageProps) =>{
     );
 }
 
-export default MainImage;
+export default Banner;

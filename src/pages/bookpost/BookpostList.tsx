@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import MainImage from "@components/MainImage";
+import Banner from "@components/Banner";
 import {
     Box,
     Container,
@@ -15,7 +15,7 @@ import PhotoLibraryOutlinedIcon from '@mui/icons-material/PhotoLibraryOutlined';
 import AddCircleOutlinedIcon from '@mui/icons-material/AddCircleOutlined';
 import TabPanel from "@components/TabPanel";
 
-const mainImage = {
+const banner = {
     title: 'Title of a longer featured blog post',
     description:
         "Multiple lines of text that form the lede, informing new readers quickly and efficiently about what's most interesting in this post's contents.",
@@ -92,7 +92,7 @@ const BookpostList= (props: any) => {
 
     return(
         <Container component="main" sx={{mt:1.5}} >
-            <MainImage post={mainImage}/>
+            <Banner banner={banner}/>
 
             <Box sx={{mt:3}}>
                 <Toolbar>
