@@ -1,14 +1,21 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, Component } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { resetStore } from "@modules/index";
 import * as actions from "@modules/bookclub/actionOfBookclub";
 import axiosConfig from "@utils/axiosConfig";
 import { isNotEmpty, isEmpty } from "@utils/valid";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import Slider from "react-slick";
+
 
 interface ClubList {
   clubList: string[],
 }
+
+
+
 const Bookclub = (props: any) => {
   let navigate = useNavigate();
   const dispatch = useDispatch();
@@ -26,6 +33,8 @@ const Bookclub = (props: any) => {
     }
   }
 
+  
+
   function SetMainImage(props: any) {
     return (
       <img
@@ -34,6 +43,8 @@ const Bookclub = (props: any) => {
       alt={mainImg.user.name}/>
     );
   }
+
+  
 
   const getBookclubList = (keyword: string) => {
     axiosConfig.get("/api/v1/bookclub/list", {
@@ -59,9 +70,10 @@ const Bookclub = (props: any) => {
       />
       <div>
         <h3></h3>
-        <h3>이 달의 추천 모임</h3>
+        <h3>이 달의 추천 모임 </h3>
       </div>
-      {clubList.map((element) => <div>{element}</div>)}
+    
+      {/* {clubList.map((element) => <div>{element}</div>)} */}
     </div>
   );
 };
