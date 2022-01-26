@@ -14,6 +14,7 @@ import RoleList from "@pages/settings/roles/RoleList";
 import EditRole from "@pages/settings/roles/EditRole";
 
 import BookclubList from "@pages/bookclub/BookclubList";
+import BookpostList from "@pages/bookpost/BookpostList";
 
 const Router = (props: any) => {
   return (
@@ -29,6 +30,7 @@ const Router = (props: any) => {
       <Route path="/users/profile/edit" element={<EditUserProfile />} />
       <Route path="/signup" element={<Signup />} />
       <Route path="/bookclub/list" element={<BookclubList />} />
+      <Route path="/bookpost/list" element={<BookpostList />}/>
     </Routes>
   );
 };

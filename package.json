@@ -5,6 +5,11 @@
   "dependencies": {
     "@ag-grid-community/core": "^26.2.1",
     "@craco/craco": "^6.4.3",
+    "@emotion/react": "^11.7.1",
+    "@emotion/styled": "^11.6.0",
+    "@fontsource/roboto": "^4.5.1",
+    "@mui/icons-material": "^5.3.0",
+    "@mui/material": "^5.3.0",
     "@redux-devtools/extension": "^3.1.0",
     "@testing-library/jest-dom": "^5.16.1",
     "@testing-library/react": "^12.1.2",

@@ -11,8 +11,8 @@ const instance = axios.create({
 });
 
 // Where you would set stuff like your 'Authorization' header, etc ...
-instance.defaults.headers.common["Acess-Control-Allow-Origin"] = "*";
-instance.defaults.headers.common["Content-type"] = "application/json";
+instance.defaults.headers.common["Access-Control-Allow-Origin"] = "*";
+//instance.defaults.headers.common["Content-type"] = "application/json;charset=UTF-8";
 
 // Also add/ configure interceptors && all the other cool stuff
 
