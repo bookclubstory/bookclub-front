@@ -16,7 +16,7 @@ const Bookclub = (props: any) => {
 
   useEffect(() => {
     // 컴포넌트 로드시 1번 실행
-    getBookclubList("");
+    //getBookclubList("");
   }, []);
 
   const getBookclubList = (keyword: string) => {
@@ -39,7 +39,7 @@ const Bookclub = (props: any) => {
 
   return (
     <div>
-      {clubList.map((element) => <div>{element}</div>)}
+      {clubList.map((element, key) => <div key={key}>{element}</div>)}
     </div>
   );
 };
