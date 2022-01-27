@@ -14,6 +14,8 @@ import LocalOfferIcon from '@mui/icons-material/LocalOffer';
 import PhotoLibraryOutlinedIcon from '@mui/icons-material/PhotoLibraryOutlined';
 import AddCircleOutlinedIcon from '@mui/icons-material/AddCircleOutlined';
 import TabPanel from "@components/TabPanel";
+import axiosConfig from "@utils/axiosConfig";
+import {useNavigate} from "react-router-dom";
 
 const banner = {
     title: 'Title of a longer featured blog post',
@@ -23,65 +25,42 @@ const banner = {
     imageText: 'main image description',
 };
 
-const itemData = [
-    {
-        id: 1,
-        img: 'https://images.unsplash.com/photo-1551963831-b3b1ca40c98e',
-        title: 'Breakfast',
-    },
-    {
-        id: 2,
-        img: 'https://images.unsplash.com/photo-1551782450-a2132b4ba21d',
-        title: 'Burger',
-    },
-    {
-        id: 3,
-        img: 'https://images.unsplash.com/photo-1522770179533-24471fcdba45',
-        title: 'Camera',
-    },
-    {
-        id: 4,
-        img: 'https://images.unsplash.com/photo-1444418776041-9c7e33cc5a9c',
-        title: 'Coffee',
-    },
-    {
-        id: 5,
-        img: 'https://images.unsplash.com/photo-1533827432537-70133748f5c8',
-        title: 'Hats',
-    },
-    {
-        id: 6,
-        img: 'https://images.unsplash.com/photo-1558642452-9d2a7deb7f62',
-        title: 'Honey',
-    },
-    {
-        id: 7,
-        img: 'https://images.unsplash.com/photo-1551963831-b3b1ca40c98e',
-        title: 'Breakfast',
-    },
-    {
-        id: 8,
-        img: 'https://images.unsplash.com/photo-1551782450-a2132b4ba21d',
-        title: 'Burger',
-    },
-    {
-        id: 9,
-        img: 'https://images.unsplash.com/photo-1522770179533-24471fcdba45',
-        title: 'Camera',
-    },
-];
+interface BookpostList{
+    postList:[
+        {
+            boardId: number
+            postId: string,
+            title: string,
+            rprsImageUrl: string
+        },
+    ],
+}
 
 function tabProps(name: string, index: number) {
     return {
         id: `${name}-${index}`,
         'aria-controls': `${name}-${index}`,
-
     };
 }
 
 const BookpostList= (props: any) => {
+    let navigate = useNavigate();
+
+    useEffect(() => {
+        // 컴포넌트 로드시 1번 실행
+        getBookpostList();
+    }, []);
+
     const [value, setValue] = useState(0);
     const [open, setOpen] = React.useState(false);
+
+    const [error, setError] = useState(null);
+    const [postList, setPostList] = useState<BookpostList["postList"]>([{
+        boardId:0,
+        postId: "",
+        title: "",
+        rprsImageUrl: ""
+    }]);
 
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
@@ -89,6 +68,27 @@ const BookpostList= (props: any) => {
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
         setValue(newValue);
     };
+
+    const moveToBookpost= (postId:string) => {
+        navigate(`/bookpost/list/${postId}`, {replace: true})
+    }
+
+    const getBookpostList = () => {
+        setError(null);
+        axiosConfig.get("/api/v1/bookpost/list")
+        .then(function (response: any) {
+            // success
+            setPostList(response.data);
+        })
+        .catch(function (error: any) {
+            //error
+            setError(error)
+
+        })
+        .then(function () {
+            // finally
+        });
+    }
 
     return(
         <Container component="main" sx={{mt:1.5}} >
@@ -98,7 +98,7 @@ const BookpostList= (props: any) => {
                 <Toolbar>
                     <Tabs value={value} onChange={handleChange}>
                         <Tab icon={<GridOnIcon />} iconPosition="start" label="게시물" {...tabProps("tab",0)}/>
-                        <Tab icon={<LocalOfferIcon/>} iconPosition="start" label="태그됨" {...tabProps("tab",1)}/>
+                        {/*<Tab icon={<LocalOfferIcon/>} iconPosition="start" label="태그됨" {...tabProps("tab",1)}/>*/}
                     </Tabs>
                     <Box sx={{ flexGrow: 1 }} />
                     <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
@@ -130,13 +130,13 @@ const BookpostList= (props: any) => {
             {/*게시물*/}
             <TabPanel name="tab" index={0} value={value} >
                 <Grid container spacing={1}>
-                    {itemData.map((item)=> {
+                    {!error&&postList.map((item)=> {
                         return (
-                            <Grid item key={item.id} xs={12} md={4}>
-                                <ImageListItem key={item.id} >
+                            <Grid item key={item.postId} xs={12} md={4}>
+                                <ImageListItem key={item.postId} onClick={()=>moveToBookpost(item.postId)}>
                                     <img
-                                        src={`${item.img}?auto=format`}
-                                        srcSet={`${item.img}?auto=format&dpr=2 2x`}
+                                        src={`${item.rprsImageUrl}?auto=format`}
+                                        srcSet={`${item.rprsImageUrl}?auto=format&dpr=2 2x`}
                                         alt={item.title}
                                         loading="lazy"
                                     />
@@ -166,8 +166,8 @@ const BookpostList= (props: any) => {
             </TabPanel>
 
             {/*태그됨*/}
-            <TabPanel name="tab" index={1} value={value}>
-            </TabPanel>
+            {/*<TabPanel name="tab" index={1} value={value}>*/}
+            {/*</TabPanel>*/}
 
         </Container>
     );
