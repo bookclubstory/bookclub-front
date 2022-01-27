@@ -37,7 +37,7 @@ instance.interceptors.response.use(
     if (error.response && error.response.data && error.response.data.message) {
       if (error.response.data.status === 403) {
         //history.push("/login");
-        window.location.reload();
+        //window.location.reload();
       } else {
         MySwal.fire({
           icon: "error",
