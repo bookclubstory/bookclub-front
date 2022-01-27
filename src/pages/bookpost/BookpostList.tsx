@@ -10,10 +10,12 @@ import {
     Tab, Modal, Grid, Toolbar,
 } from "@mui/material";
 import GridOnIcon from '@mui/icons-material/GridOn';
+import LocalOfferIcon from '@mui/icons-material/LocalOffer';
 import PhotoLibraryOutlinedIcon from '@mui/icons-material/PhotoLibraryOutlined';
 import AddCircleOutlinedIcon from '@mui/icons-material/AddCircleOutlined';
 import TabPanel from "@components/TabPanel";
 import axiosConfig from "@utils/axiosConfig";
+import {useNavigate} from "react-router-dom";
 
 const banner = {
     title: 'Title of a longer featured blog post',
@@ -42,6 +44,8 @@ function tabProps(name: string, index: number) {
 }
 
 const BookpostList= (props: any) => {
+    let navigate = useNavigate();
+
     useEffect(() => {
         // 컴포넌트 로드시 1번 실행
         getBookpostList();
@@ -64,6 +68,10 @@ const BookpostList= (props: any) => {
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
         setValue(newValue);
     };
+
+    const moveToBookpost= (postId:string) => {
+        navigate(`/bookpost/list/${postId}`, {replace: true})
+    }
 
     const getBookpostList = () => {
         setError(null);
@@ -125,7 +133,7 @@ const BookpostList= (props: any) => {
                     {!error&&postList.map((item)=> {
                         return (
                             <Grid item key={item.postId} xs={12} md={4}>
-                                <ImageListItem key={item.postId} >
+                                <ImageListItem key={item.postId} onClick={()=>moveToBookpost(item.postId)}>
                                     <img
                                         src={`${item.rprsImageUrl}?auto=format`}
                                         srcSet={`${item.rprsImageUrl}?auto=format&dpr=2 2x`}
