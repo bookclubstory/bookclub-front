@@ -97,9 +97,6 @@ const Login = (props: any) => {
           })
         );
 
-        // 3. browser Cookies
-        session.setCookie("session", JSON.stringify(loginInfo));
-
         axiosConfig.defaults.headers.common["x-auth-token"] = response.data.token;
 
         navigate("/");

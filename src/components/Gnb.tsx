@@ -64,7 +64,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 const SigninBlock = (props: any) => {
   const dispatch = useDispatch();
-  const session = useContext(SessionContext);
+
   // Description: 로그인 후 개인 메뉴 기능 (아이콘 드랍다운 메뉴)
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -80,9 +80,6 @@ const SigninBlock = (props: any) => {
     dispatch(initStore())
     // 2. clear browser Local storage
     global.localStorage.clear();
-    // 3. clear Cookies
-    //session.removeCookie("session");
-    document.cookie = "username=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
 
     handleClose();
   }
@@ -145,7 +142,6 @@ const SigninBlock = (props: any) => {
 
 const Gnb = (props: any) => {
   const dispatch = useDispatch();
-  const session = useContext(SessionContext);
   const [signinYn, setSigninYn] = useState<boolean>(false);
   let storedSession = useSelector((state: RootStateOrAny) => state.session.loginInfo);
 
