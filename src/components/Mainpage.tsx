@@ -17,7 +17,6 @@ const Main = (props: any) => {
     //checkValidToken();
     getRoleList();
     getUserList();
-    console.log("loginId : " + session.loginId);
   }, []);
 
   const getRoleList = () => {
