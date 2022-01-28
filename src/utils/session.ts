@@ -11,8 +11,4 @@ export const getCookie = (name: string) => {
     return cookies.get(name);
 }
 
-export const removeCookie = (name: string, option?: any) => {
-    return cookies.remove(name, { ...option });
-}
-
 export const SessionContext = React.createContext(getCookie("session"));
