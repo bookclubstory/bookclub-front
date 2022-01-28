@@ -7,7 +7,7 @@ import {
     ImageListItem,
     ImageListItemBar,
     Tabs,
-    Tab, Modal, Grid, Toolbar,
+    Tab, Modal, Grid, Toolbar, ThemeProvider,
 } from "@mui/material";
 import GridOnIcon from '@mui/icons-material/GridOn';
 import LocalOfferIcon from '@mui/icons-material/LocalOffer';
@@ -16,6 +16,18 @@ import AddCircleOutlinedIcon from '@mui/icons-material/AddCircleOutlined';
 import TabPanel from "@components/TabPanel";
 import axiosConfig from "@utils/axiosConfig";
 import {useNavigate} from "react-router-dom";
+import {createTheme} from "@mui/material/styles";
+
+const theme = createTheme({
+    components: {
+        // Name of the component
+        MuiImageListItem: {
+            defaultProps:{
+              style:{height:"240px", width:"100%"}
+            },
+        },
+    },
+});
 
 const banner = {
     title: 'Title of a longer featured blog post',
@@ -69,6 +81,11 @@ const BookpostList= (props: any) => {
         setValue(newValue);
     };
 
+    const handleImgError = (event: any) => {
+        //이미지가 없는 경우, default이미지(todo:추후 변경)
+        event.target.src = 'https://images.unsplash.com/photo-1444418776041-9c7e33cc5a9c';
+    }
+
     const moveToBookpost= (postId:string) => {
         navigate(`/bookpost/list/${postId}`, {replace: true})
     }
@@ -91,85 +108,88 @@ const BookpostList= (props: any) => {
     }
 
     return(
-        <Container component="main" sx={{mt:1.5}} >
-            <Banner banner={banner}/>
+        <ThemeProvider theme={theme}>
+            <Container component="main" sx={{mt:1.5}} >
+                <Banner banner={banner}/>
 
-            <Box sx={{mt:3}}>
-                <Toolbar>
-                    <Tabs value={value} onChange={handleChange}>
-                        <Tab icon={<GridOnIcon />} iconPosition="start" label="게시물" {...tabProps("tab",0)}/>
-                        {/*<Tab icon={<LocalOfferIcon/>} iconPosition="start" label="태그됨" {...tabProps("tab",1)}/>*/}
-                    </Tabs>
-                    <Box sx={{ flexGrow: 1 }} />
-                    <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-                        <IconButton
-                            size="large"
-                            edge="end"
-                            color="inherit"
-                            aria-label="Open Modal"
-                            onClick={handleOpen}
-                        >
-                            <AddCircleOutlinedIcon />
-                        </IconButton>
-                    </Box>
-                </Toolbar>
+                <Box sx={{mt:3}}>
+                    <Toolbar>
+                        <Tabs value={value} onChange={handleChange}>
+                            <Tab icon={<GridOnIcon />} iconPosition="start" label="게시물" {...tabProps("tab",0)}/>
+                            {/*<Tab icon={<LocalOfferIcon/>} iconPosition="start" label="태그됨" {...tabProps("tab",1)}/>*/}
+                        </Tabs>
+                        <Box sx={{ flexGrow: 1 }} />
+                        <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+                            <IconButton
+                                size="large"
+                                edge="end"
+                                color="inherit"
+                                aria-label="Open Modal"
+                                onClick={handleOpen}
+                            >
+                                <AddCircleOutlinedIcon />
+                            </IconButton>
+                        </Box>
+                    </Toolbar>
 
-                <Modal
-                    open={open}
-                    onClose={handleClose}
-                    aria-labelledby="modal-modal-title"
-                    aria-describedby="modal-modal-description"
-                >
-                    {/*START MODAL*/}
-                    <Box>
-                    </Box>
-                    {/* <!-- /END MODAL --> */}
-                </Modal>
-            </Box>
+                    <Modal
+                        open={open}
+                        onClose={handleClose}
+                        aria-labelledby="modal-modal-title"
+                        aria-describedby="modal-modal-description"
+                    >
+                        {/*START MODAL*/}
+                        <Box>
+                        </Box>
+                        {/* <!-- /END MODAL --> */}
+                    </Modal>
+                </Box>
 
-            {/*게시물*/}
-            <TabPanel name="tab" index={0} value={value} >
-                <Grid container spacing={1}>
-                    {!error&&postList.map((item)=> {
-                        return (
-                            <Grid item key={item.postId} xs={12} md={4}>
-                                <ImageListItem key={item.postId} onClick={()=>moveToBookpost(item.postId)}>
-                                    <img
-                                        src={`${item.rprsImageUrl}?auto=format`}
-                                        srcSet={`${item.rprsImageUrl}?auto=format&dpr=2 2x`}
-                                        alt={item.title}
-                                        loading="lazy"
-                                    />
-                                    <ImageListItemBar
-                                        sx={{
-                                            background:
-                                                'linear-gradient(to bottom, rgba(0,0,0,0.7) 0%, ' +
-                                                'rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)',
-                                        }}
-                                        title={item.title}
-                                        position="top"
-                                        actionIcon={
-                                            <IconButton
-                                                sx={{ color: 'white'}}
-                                                aria-label={`${item.title}`}
-                                            >
-                                                <PhotoLibraryOutlinedIcon />
-                                            </IconButton>
-                                        }
-                                        actionPosition="right"
-                                    />
-                                </ImageListItem>
-                            </Grid>
-                        );
-                    })}
-                </Grid>
-            </TabPanel>
+                {/*게시물*/}
+                <TabPanel name="tab" index={0} value={value} >
+                    <Grid container spacing={1}>
+                        {!error&&postList.map((item)=> {
+                            return (
+                                <Grid item key={item.postId} xs={12} md={4}>
+                                    <ImageListItem key={item.postId} onClick={()=>moveToBookpost(item.postId)}>
+                                        <img
+                                            src={`${item.rprsImageUrl}?auto=format`}
+                                            srcSet={`${item.rprsImageUrl}?auto=format&dpr=2 2x`}
+                                            alt={item.title}
+                                            loading="lazy"
+                                            onError={handleImgError}
+                                        />
+                                        <ImageListItemBar
+                                            sx={{
+                                                background:
+                                                    'linear-gradient(to bottom, rgba(0,0,0,0.7) 0%, ' +
+                                                    'rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)',
+                                            }}
+                                            title={item.title}
+                                            position="top"
+                                            actionIcon={
+                                                <IconButton
+                                                    sx={{ color: 'white'}}
+                                                    aria-label={`${item.title}`}
+                                                >
+                                                    <PhotoLibraryOutlinedIcon />
+                                                </IconButton>
+                                            }
+                                            actionPosition="right"
+                                        />
+                                    </ImageListItem>
+                             </Grid>
+                            );
+                        })}
+                    </Grid>
+                </TabPanel>
 
-            {/*태그됨*/}
-            {/*<TabPanel name="tab" index={1} value={value}>*/}
-            {/*</TabPanel>*/}
+                {/*태그됨*/}
+                {/*<TabPanel name="tab" index={1} value={value}>*/}
+                {/*</TabPanel>*/}
 
-        </Container>
+            </Container>
+        </ThemeProvider>
     );
 };
 
