@@ -2,7 +2,6 @@ import React, { useContext, useState, useEffect, MouseEvent } from "react";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch, RootStateOrAny } from "react-redux";
 import { ReducerType, resetStore, initStore } from "@modules/index";
-import { SessionContext } from "@utils/session";
 import {
   alpha,
   AppBar,
@@ -17,10 +16,7 @@ import {
 } from "@mui/material";
 import AutoStoriesIcon from "@mui/icons-material/AutoStories";
 import SearchIcon from "@mui/icons-material/Search";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
-import * as session from "@utils/session";
+import SigninBlock from "@components/gnb/SigninBlock";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -62,90 +58,13 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-const SigninBlock = (props: any) => {
-  const dispatch = useDispatch();
-
-  // Description: 로그인 후 개인 메뉴 기능 (아이콘 드랍다운 메뉴)
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
-  const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
-  const signout = () => {
-    // 1. clear redux store
-    dispatch(initStore())
-    // 2. clear browser Local storage
-    global.localStorage.clear();
-
-    handleClose();
-  }
-
-  if (props.signinYn) {
-    return (
-      <div>
-        <IconButton
-          sx={{ my: 2, mx: 1, color: "white" }}
-          aria-label="my profile"
-          aria-controls={open ? "basic-menu" : undefined}
-          aria-haspopup="true"
-          aria-expanded={open ? "true" : undefined}
-          onClick={handleClick}
-        >
-          <AccountCircleIcon />
-        </IconButton>
-        <Menu
-          id="basic-menu"
-          anchorEl={anchorEl}
-          open={open}
-          onClose={handleClose}
-          MenuListProps={{
-            "aria-labelledby": "basic-button",
-          }}
-        >
-          <MenuItem onClick={handleClose}>Profile</MenuItem>
-          <MenuItem onClick={handleClose}>My account</MenuItem>
-          <MenuItem onClick={() => signout()}>Logout</MenuItem>
-        </Menu>
-      </div>
-    );
-  } else {
-    return (
-      <div>
-        <Button
-          color="inherit"
-          variant="outlined"
-          size="small"
-          sx={{ my: 2, mx: 1 }}
-          component={Link}
-          to={"/login"}
-        >
-          Log in
-        </Button>
-        <Button
-          color="inherit"
-          variant="outlined"
-          size="small"
-          sx={{ my: 2, mx: 1 }}
-          component={Link}
-          to={"/signup"}
-        >
-          Sign Up
-        </Button>
-      </div>
-    );    
-  }
-};
-
 const Gnb = (props: any) => {
   const dispatch = useDispatch();
   const [signinYn, setSigninYn] = useState<boolean>(false);
   let storedSession = useSelector((state: RootStateOrAny) => state.session.loginInfo);
 
   useEffect(() => {
+    // for SigninBlock display & hidden
     console.log("Changed session...!")
     console.log(storedSession);
     if (storedSession.loginId) {

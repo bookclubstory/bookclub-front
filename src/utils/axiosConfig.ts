@@ -1,6 +1,6 @@
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
-//import { history } from "@src/App";
+import { isValidSession } from "@utils/valid";
 
 // First we need to import axios.js
 import axios from "axios";
@@ -17,10 +17,12 @@ instance.defaults.headers.common["Access-Control-Allow-Origin"] = "*";
 // Also add/ configure interceptors && all the other cool stuff
 
 const MySwal = withReactContent(Swal);
-
 instance.interceptors.request.use(
   (request) => {
     // Edit request config
+
+    // check session
+    isValidSession();
     return request;
   },
   (error) => {
