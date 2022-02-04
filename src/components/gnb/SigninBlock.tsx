@@ -34,9 +34,9 @@ const SigninBlock: React.FC<Props> = (props) => {
 
   if (props.signinYn) {
     return (
-      <div>
+      <div style={{padding: "5px"}}>
         <IconButton
-          sx={{ my: 2, mx: 1, color: "white" }}
+          sx={{ my: 1, mx: 1, color: "white" }}
           aria-label="my profile"
           aria-controls={open ? "basic-menu" : undefined}
           aria-haspopup="true"
