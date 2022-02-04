@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import axiosConfig from "@utils/axiosConfig";
-import * as session from "@utils/session";
 import * as actions from "@modules/user/session";
 
 import "@styles/App.css";
@@ -33,6 +32,7 @@ const Login = (props: any) => {
   const loginSubmit = useRef<HTMLButtonElement>(null);
 
   const goLogin = () => {
+    console.log("goLogin()");
     //test
     // let sample = {
     //   loginId: "sample",
@@ -51,6 +51,8 @@ const Login = (props: any) => {
     if (loginUserPassword.current !== null) {
       password = loginUserPassword.current.value;
     }
+    console.log("username: " + username);
+    console.log("password: " + password);
     axiosConfig
       .post("/login", {
         username: username,
