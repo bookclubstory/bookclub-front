@@ -6,6 +6,8 @@ import { Button, IconButton } from "@mui/material";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
+import Divider from "@mui/material/Divider";
+import Box from "@mui/material/Box";
 
 interface Props {
   signinYn: boolean;
@@ -34,9 +36,9 @@ const SigninBlock: React.FC<Props> = (props) => {
 
   if (props.signinYn) {
     return (
-      <div>
+      <div style={{ padding: "5px" }}>
         <IconButton
-          sx={{ my: 2, mx: 1, color: "white" }}
+          sx={{ my: 1, mx: 1, color: "white" }}
           aria-label="my profile"
           aria-controls={open ? "basic-menu" : undefined}
           aria-haspopup="true"
@@ -54,9 +56,17 @@ const SigninBlock: React.FC<Props> = (props) => {
             "aria-labelledby": "basic-button",
           }}
         >
-          <MenuItem onClick={handleClose}>Profile</MenuItem>
+          <Box component="span" m={1} color={"teal"}>
+            Security
+          </Box>
+          <MenuItem onClick={handleClose}>Users</MenuItem>
+          <MenuItem onClick={handleClose}>Roles</MenuItem>
+          <Divider />
+          <Box component="span" m={1} color={"teal"}>
+            User
+          </Box>
           <MenuItem onClick={handleClose}>My account</MenuItem>
-          <MenuItem onClick={() => signout()}>Logout</MenuItem>
+          <MenuItem onClick={() => signout()}>Signout</MenuItem>
         </Menu>
       </div>
     );
