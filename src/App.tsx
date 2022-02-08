@@ -6,11 +6,11 @@ import logger from "redux-logger";
 import { composeWithDevTools } from "@redux-devtools/extension";
 import { BrowserRouter } from "react-router-dom";
 import { createBrowserHistory } from "history";
-import { SessionContext, getCookie, setCookie } from "@utils/session";
+import { SessionContext, getCookie, setCookie } from "@utils/cookies";
 
 import "@styles/App.css";
 
-import Gnb from "@components/Gnb";
+import Gnb from "@src/components/gnb/Gnb";
 import Router from "@components/Router";
 import Footer from "@components/Footer";
 import { Container } from "@mui/material";

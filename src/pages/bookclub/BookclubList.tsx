@@ -86,6 +86,7 @@ const Bookclub = (props: any) => {
           </div>
       </div>
   </main>)};
+
   function SetMainImage(props: any) {
     return (
       <img
@@ -131,6 +132,7 @@ const Bookclub = (props: any) => {
          </div>
        </div>
 {/*       {clubList.map((element) => <div>{element}</div>)} */}
+      {clubList.map((element, key) => <div key={key}>{element}</div>)}
     </div>
   );
 };

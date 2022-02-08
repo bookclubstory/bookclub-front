@@ -4,7 +4,7 @@ import { Link as RouterLink, useNavigate } from "react-router-dom";
 import * as actionOfUser from "@modules/user/actionOfUser";
 import * as actionOfSettings from "@modules/system/actionOfSettings";
 import axiosConfig from "@utils/axiosConfig";
-import { SessionContext } from "@utils/session";
+import { SessionContext } from "@utils/cookies";
 import {Box, Divider, Grid, Paper} from "@mui/material";
 
 const Main = (props: any) => {
@@ -17,7 +17,6 @@ const Main = (props: any) => {
     //checkValidToken();
     getRoleList();
     getUserList();
-    console.log("loginId : " + session.loginId);
   }, []);
 
   const getRoleList = () => {

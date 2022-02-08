@@ -13,6 +13,7 @@ const appReducer = combineReducers({
 });
 
 const RESET_STORE = "RESET_STORE";
+const INIT_STORE = "INIT_STORE";
 
 // to reset the state of redux store
 export const resetStore = () => {
@@ -20,8 +21,17 @@ export const resetStore = () => {
         type: RESET_STORE
     }
 }
+export const initStore = () => {
+    return {
+        type: INIT_STORE
+    }
+}
 
 const rootReducer = (state: any, action: any) => {
+    if (action.type === INIT_STORE) {
+        // reset all Reducers state
+        state = undefined;
+    }
     if (action.type === RESET_STORE) {
         // reset all Reducers state
         //state = undefined;
