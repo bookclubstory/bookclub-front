@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useCallback, useEffect, useRef, useState} from "react";
 import Banner from "@components/Banner";
 import {
     Box,
@@ -37,8 +37,10 @@ const banner = {
     imageText: 'main image description',
 };
 
+const PAGE_SIZE = 6; //추후 사이즈 변경
+
 interface BookpostList{
-    postList:[
+    content:[
         {
             boardId: number
             postId: string,
@@ -58,21 +60,50 @@ function tabProps(name: string, index: number) {
 const BookpostList= (props: any) => {
     let navigate = useNavigate();
 
-    useEffect(() => {
-        // 컴포넌트 로드시 1번 실행
-        getBookpostList();
-    }, []);
-
     const [value, setValue] = useState(0);
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = useState(false);
 
     const [error, setError] = useState(null);
-    const [postList, setPostList] = useState<BookpostList["postList"]>([{
+
+    const [target, setTarget] = useState<HTMLDivElement | null>(null);
+
+    const [postList, setPostList] = useState<BookpostList["content"]>([{
         boardId:0,
         postId: "",
         title: "",
         rprsImageUrl: ""
     }]);
+
+    const currentPage = useRef(0);
+    const totalPage = useRef(0);
+
+    useEffect(() => {
+        // 컴포넌트 로드시 1번 실행
+        getBookpostList();
+    }, []);
+
+    /* 인터섹션 callback */
+    const onIntersect = useCallback(([entry], observer) => {
+        if (entry.isIntersecting &&
+            currentPage.current < totalPage.current) {
+            loadMoreBookPostList();
+        }
+    }, []);
+
+    useEffect(() =>{
+        const options = {
+            root: null,
+            rootMargin: "0px",
+            threshold: 1.0
+        };
+
+        const observer = new IntersectionObserver(onIntersect, options);
+
+        if(target){
+            observer.observe(target);
+        }
+        return () =>observer && observer.disconnect();
+    },[target])
 
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
@@ -90,12 +121,20 @@ const BookpostList= (props: any) => {
         navigate(`/bookpost/list/${postId}`, {replace: true})
     }
 
-    const getBookpostList = () => {
+    const getBookpostList = async () => {
         setError(null);
-        axiosConfig.get("/api/v1/bookpost/list")
+        await axiosConfig.get("/api/v1/bookpost/list",{
+            params: {
+                size: PAGE_SIZE,
+            },
+        })
         .then(function (response: any) {
             // success
-            setPostList(response.data);
+            setPostList(response.data.content);
+
+            totalPage.current = response.data.totalPages;
+            currentPage.current ++;
+
         })
         .catch(function (error: any) {
             //error
@@ -105,6 +144,31 @@ const BookpostList= (props: any) => {
         .then(function () {
             // finally
         });
+    }
+
+    const loadMoreBookPostList = async () => {
+        if(currentPage.current>0){
+          currentPage.current ++;
+
+           await axiosConfig.get("/api/v1/bookpost/list",{
+                params: {
+                    size: PAGE_SIZE,
+                    page: currentPage.current
+                },
+            })
+            .then(function (response: any) {
+                // success
+                // @ts-ignore
+                setPostList(prevState => [...prevState, ...response.data.content]);
+
+            })
+            .catch(function (error: any) {
+                //error
+                setError(error)
+                currentPage.current --;
+
+            })
+        }
     }
 
     return(
@@ -147,7 +211,7 @@ const BookpostList= (props: any) => {
 
                 {/*게시물*/}
                 <TabPanel name="tab" index={0} value={value} >
-                    <Grid container spacing={1}>
+                    <Grid container spacing={1} >
                         {!error&&postList.map((item)=> {
                             return (
                                 <Grid item key={item.postId} xs={12} md={4}>
@@ -189,6 +253,9 @@ const BookpostList= (props: any) => {
                 {/*</TabPanel>*/}
 
             </Container>
+
+            <div ref={setTarget}/>
+
         </ThemeProvider>
     );
 };
