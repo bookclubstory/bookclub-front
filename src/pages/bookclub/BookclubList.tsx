@@ -4,9 +4,6 @@ import { useSelector, useDispatch } from "react-redux";
 import { resetStore } from "@modules/index";
 import * as actions from "@modules/bookclub/actionOfBookclub";
 import axiosConfig from "@utils/axiosConfig";
-import "bootstrap/dist/css/bootstrap.min.css";
-import "bootstrap/dist/js/bootstrap.min.js";
-import "bootstrap/dist/js/bootstrap.bundle.min";
 import { isNotEmpty, isEmpty } from "@utils/valid";
 import Slider from "react-slick";
 
