@@ -13,7 +13,7 @@ import "@styles/App.css";
 import Gnb from "@src/components/gnb/Gnb";
 import Router from "@components/Router";
 import Footer from "@components/Footer";
-import {Container} from "@mui/material";
+import { Container } from "@mui/material";
 
 const middlewares = [logger];
 const store = createStore(
@@ -34,7 +34,7 @@ const App = (props: any) => {
       <SessionContext.Provider value={session}>
         <BrowserRouter>
           <Provider store={store}>
-            <Container sx={{ pt: 8.5 , pb: 6 }}>
+            <Container sx={{ pt: 8.5, pb: 6 }}>
               <Gnb />
               <Router />
             </Container>
