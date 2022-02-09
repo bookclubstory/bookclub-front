@@ -91,3 +91,11 @@ body {
   border-color: transparent;
   box-shadow: 0 0 0 3px rgba(255, 255, 255, .25);
 }
+
+.grid_search_height{
+  height: calc(100vh - 300px);
+}
+
+.grid_search_height2{
+  height: calc(100vh - 40px);
+}
