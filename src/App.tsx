@@ -9,6 +9,8 @@ import { createBrowserHistory } from "history";
 import { SessionContext, getCookie, setCookie } from "@utils/cookies";
 
 import "@styles/App.css";
+import 'ag-grid-community/dist/styles/ag-grid.css';
+import 'ag-grid-community/dist/styles/ag-theme-alpine.css';
 
 import Gnb from "@src/components/gnb/Gnb";
 import Router from "@components/Router";
