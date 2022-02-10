@@ -1,23 +1,13 @@
-import React, {useMemo, useState} from "react";
-import {Box, Container, Grid} from "@mui/material";
-import ClubHeader from "@components/ClubHeader";
 import {AgGridReact} from "ag-grid-react";
+import React, {useMemo, useState} from "react";
 
-const header = {
-    title: '공덕역 방구석 철학자들',
-    image: 'https://source.unsplash.com/random',
-    subtitle: "혼자선 읽기 힘든 철학서적들 독서 품앗이로 함께 읽어요",
-    memberCnt: 4,
-    memberTotCnt: 10,
-    username: "Starrything",
-    description: "EXIT를 꿈꾸는 개발자"
+interface ClubMemberListProps {
+    clubId: string
 }
 
-interface BookclubMemberList{
+const ClubMemberList = (props: ClubMemberListProps) =>{
+    const {clubId} = props;
 
-}
-
-const BookclubMemberList = (props: any) => {
     const defaultColDef = useMemo(() => {
         return {
             resizable: true,
@@ -79,21 +69,15 @@ const BookclubMemberList = (props: any) => {
     ];
 
     return (
-        <Container component="main" sx={{mt:1.5}} >
-            <ClubHeader header={header}/>
-
-            <Box sx={{mt:3}}>
-                <div className="ag-theme-alpine grid_search_height2" >
-                    <AgGridReact
-                        columnDefs={columnDefs}
-                        rowData={rowData}
-                        defaultColDef={defaultColDef}
-                    >
-                    </AgGridReact>
-                </div>
-            </Box>
-        </Container>
+        <div className="ag-theme-alpine grid_search_height2" >
+            <AgGridReact
+                columnDefs={columnDefs}
+                rowData={rowData}
+                defaultColDef={defaultColDef}
+            >
+            </AgGridReact>
+        </div>
     );
 }
 
-export default BookclubMemberList;
+export default ClubMemberList;

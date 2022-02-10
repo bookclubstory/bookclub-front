@@ -1,16 +1,18 @@
 import {
     Avatar,
-    Box,
+    Box, Button,
     Divider,
     Grid, ListItem, ListItemAvatar, ListItemText,
-    Paper,
+    Paper, Stack,
     Typography
 } from "@mui/material";
 
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import {Dispatch, SetStateAction} from "react";
 
 interface ClubHeaderProps {
     header:{
+        clubId: string,
         title: string,
         image: string,
         subtitle: string,
@@ -18,11 +20,16 @@ interface ClubHeaderProps {
         memberTotCnt: number,
         username: string,
         description: string
-    };
+    },
+    setMain: Dispatch<SetStateAction<string>>
 }
 
 const ClubHeader = (props: ClubHeaderProps) =>{
-    const { header } = props;
+    const { header, setMain} = props;
+
+    const showMemeberList = () => {
+        setMain("member");
+    }
 
     return (
         <Paper
@@ -78,9 +85,14 @@ const ClubHeader = (props: ClubHeaderProps) =>{
                                 <Typography variant="subtitle1" component="p" paragraph>
                                     {header.subtitle}
                                 </Typography>
-                                <Typography variant="body2" component="div" align="right">
-                                    {header.memberCnt}/{header.memberTotCnt}
-                                </Typography>
+                                <Stack direction="row" spacing={4} justifyContent="flex-end" alignItems="center"sx={{pr:4}}>
+                                    <Button variant="contained" size="large" sx={{ backgroundColor: 'text.secondary' }}>
+                                        참여하기
+                                    </Button>
+                                    <Typography variant="body1" component="div" onClick={()=>showMemeberList()}>
+                                        {header.memberCnt}/{header.memberTotCnt}
+                                    </Typography>
+                                </Stack>
                             </Grid>
 
                             <Grid item xs={12}>
