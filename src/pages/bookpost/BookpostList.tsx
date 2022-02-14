@@ -17,6 +17,7 @@ import TabPanel from "@components/TabPanel";
 import axiosConfig from "@utils/axiosConfig";
 import {useNavigate} from "react-router-dom";
 import {createTheme} from "@mui/material/styles";
+import {RootStateOrAny, useSelector} from "react-redux";
 
 const theme = createTheme({
     components: {
@@ -59,6 +60,8 @@ function tabProps(name: string, index: number) {
 
 const BookpostList= (props: any) => {
     let navigate = useNavigate();
+
+    let loginYn = useSelector((state: RootStateOrAny) => state.session.loginYn);
 
     const [value, setValue] = useState(0);
     const [open, setOpen] = useState(false);
@@ -183,17 +186,19 @@ const BookpostList= (props: any) => {
                             {/*<Tab icon={<LocalOfferIcon/>} iconPosition="start" label="태그됨" {...tabProps("tab",1)}/>*/}
                         </Tabs>
                         <Box sx={{ flexGrow: 1 }} />
-                        <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-                            <IconButton
-                                size="large"
-                                edge="end"
-                                color="inherit"
-                                aria-label="Open Modal"
-                                onClick={handleOpen}
-                            >
-                                <AddCircleOutlinedIcon />
-                            </IconButton>
-                        </Box>
+                        {loginYn&&
+                            <Box sx={{display: {xs: 'none', md: 'flex'}}}>
+                                <IconButton
+                                    size="large"
+                                    edge="end"
+                                    color="inherit"
+                                    aria-label="Open Modal"
+                                    onClick={handleOpen}
+                                >
+                                    <AddCircleOutlinedIcon/>
+                                </IconButton>
+                            </Box>
+                        }
                     </Toolbar>
 
                     <Modal
