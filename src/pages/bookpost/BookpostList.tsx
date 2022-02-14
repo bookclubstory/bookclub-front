@@ -1,4 +1,10 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, {
+  ReactElement,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Box,
@@ -67,6 +73,8 @@ function tabProps(name: string, index: number) {
 const BookpostList = (props: any) => {
   let navigate = useNavigate();
   const dispatch = useDispatch();
+
+  let loginYn = useSelector((state: RootStateOrAny) => state.session.loginYn);
 
   const [value, setValue] = useState(0);
   const [addModalOpen, setAddModalOpen] = useState(false);
@@ -196,17 +204,19 @@ const BookpostList = (props: any) => {
               {/*<Tab icon={<LocalOfferIcon/>} iconPosition="start" label="태그됨" {...tabProps("tab",1)}/>*/}
             </Tabs>
             <Box sx={{ flexGrow: 1 }} />
-            <Box sx={{ display: { xs: "none", md: "flex" } }}>
-              <IconButton
-                size="large"
-                edge="end"
-                color="inherit"
-                aria-label="Open Modal"
-                onClick={handleClickOpen}
-              >
-                <AddCircleOutlinedIcon />
-              </IconButton>
-            </Box>
+            {loginYn && (
+              <Box sx={{ display: { xs: "none", md: "flex" } }}>
+                <IconButton
+                  size="large"
+                  edge="end"
+                  color="inherit"
+                  aria-label="Open Modal"
+                  onClick={handleClickOpen}
+                >
+                  <AddCircleOutlinedIcon />
+                </IconButton>
+              </Box>
+            )}
           </Toolbar>
 
           <BookpostAddModal />
