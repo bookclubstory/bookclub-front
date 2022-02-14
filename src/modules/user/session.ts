@@ -10,6 +10,7 @@ export const setLoginInfo = (data: any) => ({ type: SET_LOGIN_INFO, data });
 /* 초기 상태 선언 */
 const initialState = {
   loginInfo: {},
+  loginYn:false
 };
 
 /* 리듀서 선언 */
@@ -20,6 +21,7 @@ export default function user(state = initialState, action: any) {
       return {
         ...state,
         loginInfo: action.data,
+        loginYn: true
       };
     default:
       return state;
