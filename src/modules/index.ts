@@ -3,6 +3,7 @@ import session from "@modules/user/session";
 import actionOfUser from "@modules/user/actionOfUser";
 import actionOfSettings from "@modules/system/actionOfSettings";
 import actionOfBookclub from "@modules/bookclub/actionOfBookclub";
+import actionOfBookpost from "@modules/bookpost/actionOfBookpost";
 
 // to combine all reducers together
 const appReducer = combineReducers({
@@ -10,6 +11,7 @@ const appReducer = combineReducers({
     actionOfUser,
     actionOfSettings,
     actionOfBookclub,
+    actionOfBookpost,
 });
 
 const RESET_STORE = "RESET_STORE";
