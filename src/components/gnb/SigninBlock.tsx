@@ -10,10 +10,11 @@ import Divider from "@mui/material/Divider";
 import Box from "@mui/material/Box";
 
 interface Props {
-  signinYn: boolean;
 }
+
 const SigninBlock: React.FC<Props> = (props) => {
   const dispatch = useDispatch();
+  let loginYn = useSelector((state: RootStateOrAny) => state.session.loginInfo.loginYn);
 
   // Description: 로그인 후 개인 메뉴 기능 (아이콘 드랍다운 메뉴)
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -34,7 +35,7 @@ const SigninBlock: React.FC<Props> = (props) => {
     handleClose();
   };
 
-  if (props.signinYn) {
+  if (loginYn) {
     return (
       <div style={{ padding: "5px" }}>
         <IconButton
