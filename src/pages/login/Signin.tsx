@@ -20,6 +20,7 @@ interface LoginInfo {
   isValid: boolean;
   loginTime: number;
   lastAccessTime: number;
+  loginYn: Boolean;
 }
 
 const Login = (props: any) => {
@@ -75,6 +76,7 @@ const Login = (props: any) => {
           isValid: response.data.isValid,
           loginTime: currentTime,
           lastAccessTime: currentTime,
+          loginYn: true,
         };
         
         // 1. redux store
@@ -96,6 +98,7 @@ const Login = (props: any) => {
             isValid: loginInfo.isValid,
             loginTime: loginInfo.loginTime,
             lastAccessTime: loginInfo.lastAccessTime,
+            loginYn: loginInfo.loginYn,
           })
         );
 

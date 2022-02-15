@@ -74,7 +74,7 @@ const BookpostList = (props: any) => {
   let navigate = useNavigate();
   const dispatch = useDispatch();
 
-  let loginYn = useSelector((state: RootStateOrAny) => state.session.loginYn);
+  let loginYn = useSelector((state: RootStateOrAny) => state.session.loginInfo.loginYn);
 
   const [value, setValue] = useState(0);
   const [addModalOpen, setAddModalOpen] = useState(false);
