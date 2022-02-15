@@ -60,21 +60,10 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 const Gnb = (props: any) => {
   const dispatch = useDispatch();
-  const [signinYn, setSigninYn] = useState<boolean>(false);
   let storedSession = useSelector((state: RootStateOrAny) => state.session.loginInfo);
 
   useEffect(() => {
-    // for SigninBlock display & hidden
-    console.log("Changed session...!")
-    console.log(storedSession);
-    if (storedSession.loginId) {
-      console.log("useEffect: true");
-      setSigninYn(true);
-    } else {
-      console.log("useEffect: false");
-      setSigninYn(false);      
-    }
-  }, [storedSession]);
+  }, []);
 
   return (
     <React.Fragment>
@@ -136,7 +125,7 @@ const Gnb = (props: any) => {
             >
               독서로그
             </Button>
-            <SigninBlock signinYn={signinYn} />
+            <SigninBlock />
           </Box>
         </Toolbar>
       </AppBar>
