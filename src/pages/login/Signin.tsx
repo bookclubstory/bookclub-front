@@ -4,6 +4,9 @@ import { useSelector, useDispatch } from "react-redux";
 import axiosConfig from "@utils/axiosConfig";
 import * as actions from "@modules/user/session";
 
+import withReactContent from "sweetalert2-react-content";
+import Swal from "sweetalert2";
+
 import "@styles/App.css";
 import "@styles/signin.css";
 
@@ -22,6 +25,8 @@ interface LoginInfo {
   lastAccessTime: number;
   loginYn: Boolean;
 }
+
+const MySwal = withReactContent(Swal);
 
 const Login = (props: any) => {
   const dispatch = useDispatch();
@@ -44,9 +49,12 @@ const Login = (props: any) => {
     //navigate("/");
 
     let username = "";
+    let email = "";
     if (loginUserName.current !== null) {
       let idx = loginUserName.current.value.indexOf("@");
       username = loginUserName.current.value.substring(0, idx);
+
+      email = loginUserName.current.value;
     }
     let password = "";
     if (loginUserPassword.current !== null) {
@@ -56,7 +64,7 @@ const Login = (props: any) => {
     console.log("password: " + password);
     axiosConfig
       .post("/login", {
-        username: username,
+        email: email,
         password: password,
       })
       .then(function (response) {
@@ -108,6 +116,10 @@ const Login = (props: any) => {
       })
       .catch(function (error) {
         // error
+        MySwal.fire({
+          icon: "error",
+          text: "로그인에 실패하였습니다.",
+        });
       })
       .then(function () {
         // finally

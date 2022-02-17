@@ -4,9 +4,6 @@ import { styled } from "@mui/material/styles";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
-import ListItemText from "@mui/material/ListItemText";
-import ListItem from "@mui/material/ListItem";
-import List from "@mui/material/List";
 import Divider from "@mui/material/Divider";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
@@ -22,6 +19,11 @@ import TextField from "@mui/material/TextField";
 import { TransitionProps } from "@mui/material/transitions";
 import { useSelector, useDispatch, RootStateOrAny } from "react-redux";
 import * as actionOfBookpost from "@modules/bookpost/actionOfBookpost";
+import withReactContent from "sweetalert2-react-content";
+import Swal from "sweetalert2";
+import axiosConfig from "@utils/axiosConfig";
+
+const MySwal = withReactContent(Swal);
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
@@ -49,6 +51,8 @@ const BookpostAddModal = (props: any) => {
   const [textArea, setTextArea] = useState<number>(0);
   const [textAreaShow, setTextAreaShow] = useState<Boolean>(false);
   const [uploadImage, setUploadImage] = useState<string>("");
+  const [textFieldValue, setTextFieldValue] = useState<any>(null);
+  const [imageFIles, setImageFiles] = useState<File[]>([]);
 
   const handleClose = () => {
     dispatch(actionOfBookpost.setBookpostOpen(false));
@@ -61,15 +65,63 @@ const BookpostAddModal = (props: any) => {
     setTextArea(0);
   };
 
-  const onImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImage = (event: React.ChangeEvent<HTMLInputElement>) => {
     //
     if (event.target.files && event.target.files[0]) {
       setUploadImage(URL.createObjectURL(event.target.files[0]));
+    //   setImageFiles([...imageFIles, event.target.files[0]]);
+    setImageFiles([event.target.files[0]]);
     }
     setDescriptionShow(false);
     setTextAreaShow(true);
     setImageArea(8);
     setTextArea(4);
+  };
+
+  const handleTextField = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    setTextFieldValue(event.currentTarget.value);
+  };
+
+  const handleSave = () => {
+    //save this Bookpost
+    //valid Contents
+    if (uploadImage.length === 0) {
+      MySwal.fire({
+        icon: "error",
+        text: "이미지를 추가해 주세요.",
+      });
+      return false;
+    }
+
+    console.log("textFieldValue:");
+    console.log(textFieldValue);
+    console.log("uploadImage:");
+    console.log(uploadImage);
+
+    const formData = new FormData();
+    formData.append("content", textFieldValue);
+    formData.append("files", imageFIles[0]);
+    axiosConfig
+      .post("/api/v1/bookpost", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      })
+      .then(function (response: any) {
+        // success
+        handleClose();
+      })
+      .catch(function (error: any) {
+        // error
+        //alert("Failed to save this Dataset.");
+        MySwal.fire({
+          icon: "error",
+          text: "Failed to add a new Bookpost.",
+        });
+      })
+      .then(function () {
+        // finally
+      });
   };
 
   return (
@@ -93,7 +145,7 @@ const BookpostAddModal = (props: any) => {
             <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
               새 게시물 만들기
             </Typography>
-            <Button autoFocus color="inherit" onClick={handleClose}>
+            <Button autoFocus color="inherit" onClick={handleSave}>
               save
             </Button>
           </Toolbar>
@@ -150,7 +202,7 @@ const BookpostAddModal = (props: any) => {
                       id="add-bookpost-file"
                       multiple
                       type="file"
-                      onChange={(event) => onImageChange(event)}
+                      onChange={(event) => handleImage(event)}
                     />
                     <Button variant="contained" component="span">
                       Upload
@@ -180,6 +232,7 @@ const BookpostAddModal = (props: any) => {
                   rows={6}
                   defaultValue="Default Value"
                   variant="standard"
+                  onChange={(event) => handleTextField(event)}
                 />
               </Box>
             </Grid>
