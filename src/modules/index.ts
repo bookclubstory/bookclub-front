@@ -4,6 +4,7 @@ import actionOfUser from "@modules/user/actionOfUser";
 import actionOfSettings from "@modules/system/actionOfSettings";
 import actionOfBookclub from "@modules/bookclub/actionOfBookclub";
 import actionOfBookpost from "@modules/bookpost/actionOfBookpost";
+import actionOfClubAuth from "@modules/code/actionOfClubAuth";
 
 // to combine all reducers together
 const appReducer = combineReducers({
@@ -12,6 +13,7 @@ const appReducer = combineReducers({
     actionOfSettings,
     actionOfBookclub,
     actionOfBookpost,
+    actionOfClubAuth
 });
 
 const RESET_STORE = "RESET_STORE";
@@ -39,9 +41,9 @@ const rootReducer = (state: any, action: any) => {
         //state = undefined;
 
         // exclude Login User Information
-        const { session, actionOfCode, actionOfUser } = state;
+        const { session, actionOfCode, actionOfUser, actionOfClubAuth} = state;
         state = undefined;
-        state = { session, actionOfCode, actionOfUser };
+        state = { session, actionOfCode, actionOfUser, actionOfClubAuth};
     }
 
     return appReducer(state, action)
