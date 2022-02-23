@@ -1,35 +1,40 @@
 import {AgGridReact} from "ag-grid-react";
-import React, { useEffect, useMemo, useState} from "react";
+import React, {useCallback, useEffect, useMemo, useState} from "react";
 import axiosConfig from "@utils/axiosConfig";
 import moment from 'moment';
 import BtnRenderer from "@components/agGrid/BtnRenderer";
 import {useSelector} from "react-redux";
 import {ReducerType} from "@src/modules";
+import withReactContent from "sweetalert2-react-content";
+import Swal from "sweetalert2";
 
 interface ClubMemberListProps {
     clubId: string
 }
 
-interface ClubMember {
+interface ClubMember{
+    memberId: number,
+    username: string,
+    clubAuth: string,
+    firstName: string,
+    lastName: string,
+    email: string,
+    clubJoinDate: string,
+    sessionCnt: number,
+    isEnabled: boolean
+}
+
+interface ClubMemberList {
     codeList: [
         {
             code: string,
             value: string
         }
     ],
-    memberList:[
-        {
-            memberId: number,
-            username: string,
-            clubAuth: string,
-            firstName: string,
-            lastName: string,
-            email: string,
-            clubJoinDate: string,
-            sessionCnt: number
-        }
-    ]
+    memberList: ClubMember[]
 }
+
+const MySwal = withReactContent(Swal);
 
 const ClubMemberList = (props: ClubMemberListProps) =>{
     const {clubId} = props;
@@ -39,17 +44,8 @@ const ClubMemberList = (props: ClubMemberListProps) =>{
     let codeList = useSelector((state: ReducerType) => state.actionOfClubAuth.codeList);
     let session = useSelector((state: ReducerType) => state.session.loginInfo)
 
-    const [memberList, setMemberList] = useState<ClubMember["memberList"]>(
-        [{
-            memberId: 0,
-            username: "",
-            clubAuth: "",
-            firstName: "",
-            lastName: "",
-            email: "",
-            clubJoinDate: "",
-            sessionCnt: 0
-         }]);
+    const [memberList, setMemberList] = useState<ClubMemberList["memberList"]>(
+        []);
 
     const defaultColDef = useMemo(() => {
         return {
@@ -87,7 +83,6 @@ const ClubMemberList = (props: ClubMemberListProps) =>{
                 values: codeList.map(value=>value.code)
             },
             valueFormatter: (params:any) => {
-                console.log(codeList)
                 return codeList.filter(value => params.value===value.code).map(value=>value.value)[0]
             }
         },
@@ -121,6 +116,12 @@ const ClubMemberList = (props: ClubMemberListProps) =>{
             field: 'exit',
             width:150,
             cellRenderer: 'btnRenderer',
+            cellRendererParams:(param:any)=>{
+                return {
+                    disable: !param.node.data.isEnabled,
+                    funcNm: banMember
+                }
+            }
         },
         {
             headerName:"memberId",
@@ -134,6 +135,88 @@ const ClubMemberList = (props: ClubMemberListProps) =>{
         // 컴포넌트 로드시 1번 실행
         getMemberList();
     }, []);
+
+    const onCellEditingStopped = useCallback((event) => {
+        updateMemberClubAuth(event.node.data);
+    }, []);
+
+    const updateMemberClubAuth = (member:ClubMember) =>{
+        let memberId = member.memberId;
+
+        axiosConfig.put(`api/v1/bookclub/${clubId}/member`,{
+                memberId: memberId,
+                clubAuth: member.clubAuth,
+            })
+            .then(function (response) {
+                // success
+                // setMemberList(prevState =>
+                //     prevState.map(member => member.memberId === memberId ? response.data : member));
+                getMember(response.data.memberId);
+
+            })
+            .catch(function (error) {
+                // error
+                MySwal.fire({
+                    icon: "error",
+                    text: error.response.data.message,
+                });
+
+                getMember(memberId);
+
+            })
+            .then(function () {
+                // finally
+            });
+    }
+
+    const banMember = (member:ClubMember) =>{
+        let memberId = member.memberId;
+
+        axiosConfig.put(`api/v1/bookclub/${clubId}/member/banned`,{
+            memberId: memberId
+        })
+            .then(function (response) {
+                // success
+                setMemberList(prevState =>
+                    prevState.map(member => member.memberId === memberId ?
+                            {...member,
+                                clubAuth: response.data.clubAuth,
+                                isEnabled: false} : member));
+
+            })
+            .catch(function (error) {
+                // error
+                MySwal.fire({
+                    icon: "error",
+                    text: error.response.data.message,
+                });
+
+                getMember(memberId);
+            })
+            .then(function () {
+                // finally
+            });
+    }
+
+    const getMember = (memberId:number) => {
+        axiosConfig.get(`api/v1/bookclub/${clubId}/member/${memberId}`)
+            .then(function (response) {
+                // success
+                setMemberList(prevState =>
+                    prevState.map(member => member.memberId === memberId ? response.data : member));
+
+            })
+            .catch(function (error) {
+                // error
+                MySwal.fire({
+                    icon: "error",
+                    text: error.response.data.message,
+                });
+            })
+            .then(function () {
+                // finally
+            });
+    }
 
     const getMemberList = () => {
         setError(null)
@@ -158,6 +241,7 @@ const ClubMemberList = (props: ClubMemberListProps) =>{
                 rowData={memberList}
                 defaultColDef={defaultColDef}
                 frameworkComponents={frameworkComponents}
+                onCellEditingStopped={onCellEditingStopped}
             >
             </AgGridReact>
         </div>
