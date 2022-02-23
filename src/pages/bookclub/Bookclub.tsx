@@ -1,9 +1,12 @@
-import React, { useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Container} from "@mui/material";
 import ClubHeader from "@components/Bookclub/ClubHeader";
 
 import ClubMemberList from "@components/Bookclub/ClubMemberList";
 import ClubMain from "@components/Bookclub/ClubMain";
+import axiosConfig from "@utils/axiosConfig";
+import * as actionOfClubAuth from "@modules/code/actionOfClubAuth";
+import {useDispatch} from "react-redux";
 
 const header = {
     clubId: "1",
@@ -21,7 +24,14 @@ interface Bookclub {
 }
 
 const Bookclub = (props: any) => {
+    const dispatch = useDispatch();
+
     const [main, setMain] = useState<Bookclub["main"]>("")
+    const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+        getAuthCodeList();
+    }, []);
 
     const showMain = (clubId: string) => {
         switch(main){
@@ -33,11 +43,38 @@ const Bookclub = (props: any) => {
         }
     }
 
+    const getAuthCodeList = () => {
+        axiosConfig.get("/api/code", {
+            params: {
+                code: "CLUB_AUTH",
+            },
+        })
+        .then(function (response: any) {
+            // success
+            let codeOptions: { code: string; value: string; }[] = [];
+            response.data.forEach((element: { [x: string]: string; }) => {
+                codeOptions.push({
+                    code: element["code"],
+                    value: element["value"],
+                });
+            });
+            dispatch(actionOfClubAuth.setClubAuthList(codeOptions));
+            setLoading(true);
+        })
+        .catch(function (error) {
+            // error
+        })
+        .then(function () {
+            // finally
+        });
+    };
+
     return (
         <Container component="main" sx={{mt:1.5}} >
             <ClubHeader header={header} setMain={setMain} />
 
-            <ClubMain main={showMain(header.clubId)}/>
+            {loading&&
+                <ClubMain main={showMain(header.clubId)}/>}
         </Container>
     );
 }
