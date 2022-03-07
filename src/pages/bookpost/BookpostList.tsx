@@ -1,5 +1,4 @@
 import React, {
-  ReactElement,
   useCallback,
   useEffect,
   useRef,
@@ -10,8 +9,6 @@ import {
   Box,
   Container,
   IconButton,
-  ImageListItem,
-  ImageListItemBar,
   Tabs,
   Tab,
   Modal,
@@ -21,7 +18,6 @@ import {
 } from "@mui/material";
 import GridOnIcon from "@mui/icons-material/GridOn";
 import LocalOfferIcon from "@mui/icons-material/LocalOffer";
-import PhotoLibraryOutlinedIcon from "@mui/icons-material/PhotoLibraryOutlined";
 import AddCircleOutlinedIcon from "@mui/icons-material/AddCircleOutlined";
 import { createTheme } from "@mui/material/styles";
 import Banner from "@components/Banner";
@@ -30,6 +26,7 @@ import axiosConfig from "@utils/axiosConfig";
 import BookpostAddModal from "@pages/bookpost/BookpostAddModal";
 import { useSelector, useDispatch, RootStateOrAny } from "react-redux";
 import * as actionOfBookpost from "@modules/bookpost/actionOfBookpost";
+import BookpostItem from "@components/Bookpost/BookpostItem";
 
 const theme = createTheme({
   components: {
@@ -129,16 +126,6 @@ const BookpostList = (props: any) => {
     setValue(newValue);
   };
 
-  const handleImgError = (event: any) => {
-    //이미지가 없는 경우, default이미지(todo:추후 변경)
-    event.target.src =
-      "https://images.unsplash.com/photo-1444418776041-9c7e33cc5a9c";
-  };
-
-  const moveToBookpost = (postId: string) => {
-    navigate(`/bookpost/list/${postId}`, { replace: true });
-  };
-
   const getBookpostList = async () => {
     setError(null);
     await axiosConfig
@@ -226,42 +213,7 @@ const BookpostList = (props: any) => {
         <TabPanel name="tab" index={0} value={value}>
           <Grid container spacing={1}>
             {!error &&
-              postList.map((item) => {
-                return (
-                  <Grid item key={item.postId} xs={12} md={4}>
-                    <ImageListItem
-                      key={item.postId}
-                      onClick={() => moveToBookpost(item.postId)}
-                    >
-                      <img
-                        src={`${item.rprsImageUrl}?auto=format`}
-                        srcSet={`${item.rprsImageUrl}?auto=format&dpr=2 2x`}
-                        alt={item.title}
-                        loading="lazy"
-                        onError={handleImgError}
-                      />
-                      <ImageListItemBar
-                        sx={{
-                          background:
-                            "linear-gradient(to bottom, rgba(0,0,0,0.7) 0%, " +
-                            "rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)",
-                        }}
-                        title={item.title}
-                        position="top"
-                        actionIcon={
-                          <IconButton
-                            sx={{ color: "white" }}
-                            aria-label={`${item.title}`}
-                          >
-                            <PhotoLibraryOutlinedIcon />
-                          </IconButton>
-                        }
-                        actionPosition="right"
-                      />
-                    </ImageListItem>
-                  </Grid>
-                );
-              })}
+              postList.map((item) => (<BookpostItem key={item.postId} item={item}/>))}
           </Grid>
         </TabPanel>
 
