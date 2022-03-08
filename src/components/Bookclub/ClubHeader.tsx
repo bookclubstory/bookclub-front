@@ -11,15 +11,19 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import {Dispatch, SetStateAction} from "react";
 
 interface ClubHeaderProps {
-    header:{
+    header: {
         clubId: string,
-        title: string,
-        image: string,
-        subtitle: string,
+        clubNm: string,
+        clubLoc: string,
         memberCnt: number,
-        memberTotCnt: number,
-        username: string,
-        description: string
+        totMemberCnt:number,
+        privateYn:boolean,
+        clubIntro: string,
+        thumbnail: string,
+        owner:{
+            username: string,
+            description:string,
+        }
     },
     setMain: Dispatch<SetStateAction<string>>
 }
@@ -29,6 +33,10 @@ const ClubHeader = (props: ClubHeaderProps) =>{
 
     const showMemeberList = () => {
         setMain("member");
+    }
+
+    const showMain = () => {
+        setMain("main");
     }
 
     return (
@@ -41,11 +49,11 @@ const ClubHeader = (props: ClubHeaderProps) =>{
                 backgroundSize: 'cover',
                 backgroundRepeat: 'no-repeat',
                 backgroundPosition: 'center',
-                backgroundImage: `url(${header.image})`,
+                backgroundImage: `url(${header.thumbnail})`,
             }}
         >
             {/* Increase the priority of the hero background image */}
-            {<img style={{ display: 'none' }} src={header.image} />}
+            {<img style={{ display: 'none' }} src={header.thumbnail} />}
             <Box
                 sx={{
                     position: 'absolute',
@@ -65,8 +73,8 @@ const ClubHeader = (props: ClubHeaderProps) =>{
                             pr: { md: 0 },
                         }}
                     >
-                        <Typography component="h1" variant="h3" color="inherit" gutterBottom>
-                            {header.title}
+                        <Typography component="h1" variant="h3" color="inherit" gutterBottom onClick={()=>showMain()}>
+                            {header.clubNm}
                         </Typography>
                     </Box>
                 </Grid>
@@ -83,14 +91,14 @@ const ClubHeader = (props: ClubHeaderProps) =>{
                         <Grid container spacing={2}>
                             <Grid item xs={12}>
                                 <Typography variant="subtitle1" component="p" paragraph>
-                                    {header.subtitle}
+                                    {header.clubIntro}
                                 </Typography>
                                 <Stack direction="row" spacing={4} justifyContent="flex-end" alignItems="center"sx={{pr:4}}>
                                     <Button variant="contained" size="large" sx={{ backgroundColor: 'text.secondary' }}>
                                         참여하기
                                     </Button>
                                     <Typography variant="body1" component="div" onClick={()=>showMemeberList()}>
-                                        {header.memberCnt}/{header.memberTotCnt}
+                                        {header.memberCnt}/{header.totMemberCnt}
                                     </Typography>
                                 </Stack>
                             </Grid>
@@ -104,7 +112,7 @@ const ClubHeader = (props: ClubHeaderProps) =>{
                                                 <AccountCircleIcon />
                                             </Avatar>
                                         </ListItemAvatar>
-                                        <ListItemText primary={header.username} secondary={header.description} />
+                                        <ListItemText primary={header.owner.username} secondary={header.owner.description} />
                                     </ListItem>
                                 </Box>
                             </Grid>
