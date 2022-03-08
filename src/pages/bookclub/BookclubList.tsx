@@ -3,18 +3,25 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import axiosConfig from "@utils/axiosConfig";
 
+interface Club{
+  clubId: string,
+  clubNm: string,
+  clubLoc: string,
+  clubMemberCnt: number,
+  totMemberCnt: number,
+  privateYn: boolean,
+  clubIntro: string,
+  thumbnail: string
+}
+
 interface ClubList {
-  clubList: string[];
+  clubList: Club[];
 }
 
 const Bookclub = (props: any) => {
   let navigate = useNavigate(); // useHistory hook은 화면이동에 사용할 수 있는 history 인스턴스에 접근하게 해준다.
   const dispatch = useDispatch(); //
-  const [clubList, setClubList] = useState<ClubList["clubList"]>([
-    "클럽1",
-    "클럽2",
-    "클럽3",
-  ]);
+  const [clubList, setClubList] = useState<ClubList["clubList"]>([]);
 
   useEffect(() => {
     // 컴포넌트 로드시 1번 실행
@@ -28,6 +35,11 @@ const Bookclub = (props: any) => {
         "https://as2.ftcdn.net/v2/jpg/03/00/94/69/1000_F_300946931_kSR84OqudEhsmBZH47HU6ud7aZIDMjEx.jpg",
     },
   };
+
+  const moveToBookclub = (clubId: string) => {
+    navigate(`/bookclub/list/${clubId}`, { replace: true });
+  };
+
   function Thumbnail(props: any) {
     return (
       <main>
@@ -208,7 +220,7 @@ const Bookclub = (props: any) => {
       })
       .then(function (response: any) {
         // success
-        setClubList(response.data.clubList);
+        setClubList(response.data);
       })
       .catch(function (error: any) {
         // error
@@ -233,9 +245,8 @@ const Bookclub = (props: any) => {
           <Thumbnail />
         </div>
       </div>
-      {/*       {clubList.map((element) => <div>{element}</div>)} */}
       {clubList.map((element, key) => (
-        <div key={key}>{element}</div>
+        <div key={key} onClick={() =>moveToBookclub(element.clubId)}>{element.clubNm}</div>
       ))}
     </div>
   );

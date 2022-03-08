@@ -31,8 +31,8 @@ const Router = (props: any) => {
       <Route path="/users/profile/edit" element={<EditUserProfile />} />
       <Route path="/signup" element={<Signup />} />
       <Route path="/bookclub/list" element={<BookclubList />} />
+      <Route path="/bookclub/list/:clubId" element={<Bookclub />} />
       <Route path="/bookpost/list" element={<BookpostList />}/>
-      <Route path="/bookclub/:clubId" element={<Bookclub />} />
     </Routes>
   );
 };
