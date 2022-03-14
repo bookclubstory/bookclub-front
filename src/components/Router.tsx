@@ -16,6 +16,7 @@ import EditRole from "@pages/settings/roles/EditRole";
 import BookclubList from "@pages/bookclub/BookclubList";
 import BookpostList from "@pages/bookpost/BookpostList";
 import Bookclub from "@pages/bookclub/Bookclub";
+import AddBookclub from "@pages/bookclub/AddBookclub";
 
 const Router = (props: any) => {
   return (
@@ -32,6 +33,7 @@ const Router = (props: any) => {
       <Route path="/signup" element={<Signup />} />
       <Route path="/bookclub/list" element={<BookclubList />} />
       <Route path="/bookclub/list/:clubId" element={<Bookclub />} />
+      <Route path="/bookclub/save" element={<AddBookclub />} />
       <Route path="/bookpost/list" element={<BookpostList />}/>
     </Routes>
   );

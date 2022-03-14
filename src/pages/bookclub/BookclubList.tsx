@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import {RootStateOrAny, useDispatch, useSelector} from "react-redux";
 import axiosConfig from "@utils/axiosConfig";
+import {Box, Grid, IconButton} from "@mui/material";
+import AddCircleOutlinedIcon from "@mui/icons-material/AddCircleOutlined";
 
 interface Club{
   clubId: string,
@@ -22,6 +24,7 @@ const Bookclub = (props: any) => {
   let navigate = useNavigate(); // useHistory hook은 화면이동에 사용할 수 있는 history 인스턴스에 접근하게 해준다.
   const dispatch = useDispatch(); //
   const [clubList, setClubList] = useState<ClubList["clubList"]>([]);
+  let loginYn = useSelector((state: RootStateOrAny) => state.session.loginInfo.loginYn);
 
   useEffect(() => {
     // 컴포넌트 로드시 1번 실행
@@ -39,6 +42,10 @@ const Bookclub = (props: any) => {
   const moveToBookclub = (clubId: string) => {
     navigate(`/bookclub/list/${clubId}`, { replace: true });
   };
+
+  const handleClick = () => {
+    navigate(`/bookclub/save`, { replace: true });
+  }
 
   function Thumbnail(props: any) {
     return (
@@ -245,6 +252,25 @@ const Bookclub = (props: any) => {
           <Thumbnail />
         </div>
       </div>
+      <Grid container
+            direction="row"
+            justifyContent="flex-end"
+            alignItems="center">
+        <Grid item xs={1}>
+      {loginYn && (
+          <Box sx={{ display: { xs: "none", md: "flex"} }}>
+            <IconButton
+                size="large"
+                edge="end"
+                color="inherit"
+                onClick={handleClick}
+            >
+              <AddCircleOutlinedIcon />
+            </IconButton>
+          </Box>
+      )}
+        </Grid>
+      </Grid>
       {clubList.map((element, key) => (
         <div key={key} onClick={() =>moveToBookclub(element.clubId)}>{element.clubNm}</div>
       ))}
