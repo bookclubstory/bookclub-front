@@ -2,18 +2,20 @@ import {Container} from "@mui/material";
 import React, {useState} from "react";
 import ClubHeaderEdit from "@components/Bookclub/ClubHeaderEdit";
 import ClubDetailEdit from "@components/Bookclub/ClubDetailEdit";
+import axiosConfig from "@utils/axiosConfig";
+import {useNavigate} from "react-router-dom";
 
-const initalHeader = {
+const initialHeader = {
     clubId: '',
     clubNm: '',
     clubLoc: '',
     totMemberCnt: 1,
     privateYn: false,
     clubIntro: '',
-    thumbnail: null,
+    file: null,
 }
 
-const initalDetail = {
+const initialDetail = {
     clubIntro: '',
 }
 
@@ -24,7 +26,8 @@ interface Bookclub {
         totMemberCnt:number,
         privateYn:boolean,
         clubIntro: string,
-        thumbnail: FileList|null,
+        file: FileList|null,
+        [propsName:string]: any
     },
     detail: {
         clubIntro: string
@@ -32,8 +35,10 @@ interface Bookclub {
 }
 
 const AddBookclub = (props: any) => {
-    const [bookclub, setBookclub] = useState<Bookclub["header"]>(initalHeader);
-    const [bookclubDetail, setBookclubDetail] = useState<Bookclub["detail"]>(initalDetail);
+    let navigate = useNavigate();
+
+    const [bookclub, setBookclub] = useState<Bookclub["header"]>(initialHeader);
+    const [bookclubDetail, setBookclubDetail] = useState<Bookclub["detail"]>(initialDetail);
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value} = event.target;
@@ -58,7 +63,7 @@ const AddBookclub = (props: any) => {
     const handleFileInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const bookclubInfo = {
             ...bookclub,
-            thumbnail: event.target.files,
+            file: event.target.files,
         };
         setBookclub(bookclubInfo);
     };
@@ -76,6 +81,33 @@ const AddBookclub = (props: any) => {
     //클럽 페이지 작성
    const saveBookclub = () => {
        /*todo 페지 작성*/
+       let formData = new FormData();
+
+       let data = {
+           clubNm: bookclub["clubNm"],
+           clubLoc:bookclub["clubLoc"],
+           totMemberCnt:bookclub["totMemberCnt"],
+           privateYn:bookclub["privateYn"],
+           clubIntro:bookclub["clubIntro"],
+       }
+
+       if(bookclub.file) formData.append('file', bookclub.file[0]);
+       formData.append("data", new Blob([JSON.stringify(data)], {type: "application/json"}))
+
+       axiosConfig
+           .post(`/api/v1/bookclub`,formData)
+           .then(function (response: any) {
+               let clubId = response.data;
+               // success
+               navigate(`/bookclub/list/${clubId}`, { replace: true });
+
+           })
+           .catch(function (error: any) {
+               //error
+           })
+           .then(function () {
+               // finally
+           });
 
     }
 
