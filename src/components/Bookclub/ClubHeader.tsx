@@ -90,10 +90,11 @@ const ClubHeader = (props: ClubHeaderProps) =>{
                     >
                         <Grid container spacing={2}>
                             <Grid item xs={12}>
-                                <Typography variant="subtitle1" component="p" paragraph>
+                                <Typography variant="subtitle1" component="p" textAlign="left" paragraph
+                                            sx={{m:2}}>
                                     {header.clubIntro}
                                 </Typography>
-                                <Stack direction="row" spacing={4} justifyContent="flex-end" alignItems="center"sx={{pr:4}}>
+                                <Stack direction="row" spacing={4} justifyContent="flex-end" alignItems="center" sx={{pr:4}}>
                                     <Button variant="contained" size="large" sx={{ backgroundColor: 'text.secondary' }}>
                                         참여하기
                                     </Button>

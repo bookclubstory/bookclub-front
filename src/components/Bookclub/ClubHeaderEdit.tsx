@@ -9,7 +9,7 @@ import AddCircleOutlinedIcon from "@mui/icons-material/AddCircleOutlined";
 const ClubHeaderEdit = (props: any) =>{
     const { bookclub, handleInputChange,handleFileInputChange, handleCheckChange } = props;
 
-    const { clubNm, clubLoc, totMemberCnt, privateYn, clubIntro, thumbnail } = bookclub;
+    const { clubNm, clubLoc, totMemberCnt, privateYn, clubIntro, file } = bookclub;
 
     const [imageSrc, setImageSrc] = useState<string>('');
 
@@ -95,7 +95,7 @@ const ClubHeaderEdit = (props: any) =>{
                        }}
                        onClick={handleClick}
                    >
-                       <input ref={imgInput} type="file" name="thumbnail" accept="image/*" onChange={handleFileChange} hidden/>
+                       <input ref={imgInput} type="file" name="file" accept="image/*" onChange={handleFileChange} hidden/>
                        <IconButton
                             size="large"
                             edge="end"
