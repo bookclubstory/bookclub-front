@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import {RootStateOrAny, useDispatch, useSelector} from "react-redux";
+import { RootStateOrAny, useDispatch, useSelector } from "react-redux";
 import axiosConfig from "@utils/axiosConfig";
-import {Box, Grid, IconButton} from "@mui/material";
+import Banner from "@components/Banner";
+import { Box, Container, Grid, IconButton, ThemeProvider } from "@mui/material";
+import { createTheme } from "@mui/material/styles";
 import AddCircleOutlinedIcon from "@mui/icons-material/AddCircleOutlined";
 
-interface Club{
+interface Club {
   clubId: string,
   clubNm: string,
   clubLoc: string,
@@ -19,6 +21,25 @@ interface Club{
 interface ClubList {
   clubList: Club[];
 }
+
+const theme = createTheme({
+  components: {
+    // Name of the component
+    MuiImageListItem: {
+      defaultProps: {
+        style: { height: "240px", width: "100%" },
+      },
+    },
+  },
+});
+
+const banner = {
+  title: "Title of a longer featured blog post",
+  description:
+    "Multiple lines of text that form the lede, informing new readers quickly and efficiently about what's most interesting in this post's contents.",
+  image: "https://source.unsplash.com/random",
+  imageText: "main image description",
+};
 
 const Bookclub = (props: any) => {
   let navigate = useNavigate(); // useHistory hook은 화면이동에 사용할 수 있는 history 인스턴스에 접근하게 해준다.
@@ -52,7 +73,6 @@ const Bookclub = (props: any) => {
       <main>
         <div className="container-fluid bg-trasparent my-4 p-3">
           {" "}
-          {/*       style="position: relative" */}
           <div className="row row-cols-1 row-cols-xs-2 row-cols-sm-2 row-cols-lg-4 g-3">
             <div className="col">
               <div className="card h-100 shadow-sm">
@@ -238,43 +258,45 @@ const Bookclub = (props: any) => {
   };
 
   return (
-    <div>
-      <SetMainImage />
-      <div>
-        <h3>이 달의 추천 모임 </h3>
+    <ThemeProvider theme={theme}>
+      <Container component="main" sx={{ mt: 1.5 }}>
+        <Banner banner={banner} />
         <div>
-          <Thumbnail />
+          <h3>이 달의 추천 모임 </h3>
+          <div>
+            <Thumbnail />
+          </div>
         </div>
-      </div>
-      <div>
-        <h3>이 달의 신규 모임 </h3>
         <div>
-          <Thumbnail />
+          <h3>이 달의 신규 모임 </h3>
+          <div>
+            <Thumbnail />
+          </div>
         </div>
-      </div>
-      <Grid container
-            direction="row"
-            justifyContent="flex-end"
-            alignItems="center">
-        <Grid item xs={1}>
-      {loginYn && (
-          <Box sx={{ display: { xs: "none", md: "flex"} }}>
-            <IconButton
-                size="large"
-                edge="end"
-                color="inherit"
-                onClick={handleClick}
-            >
-              <AddCircleOutlinedIcon />
-            </IconButton>
-          </Box>
-      )}
+        <Grid container
+          direction="row"
+          justifyContent="flex-end"
+          alignItems="center">
+          <Grid item xs={1}>
+            {loginYn && (
+              <Box sx={{ display: { xs: "none", md: "flex" } }}>
+                <IconButton
+                  size="large"
+                  edge="end"
+                  color="inherit"
+                  onClick={handleClick}
+                >
+                  <AddCircleOutlinedIcon />
+                </IconButton>
+              </Box>
+            )}
+          </Grid>
         </Grid>
-      </Grid>
-      {clubList.map((element, key) => (
-        <div key={key} onClick={() =>moveToBookclub(element.clubId)}>{element.clubNm}</div>
-      ))}
-    </div>
+        {clubList.map((element, key) => (
+          <div key={key} onClick={() => moveToBookclub(element.clubId)}>{element.clubNm}</div>
+        ))}
+      </Container>
+    </ThemeProvider>
   );
 };
 

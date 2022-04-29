@@ -1,10 +1,10 @@
-import {AgGridReact} from "ag-grid-react";
-import React, {useCallback, useEffect, useMemo, useState} from "react";
+import { AgGridReact } from "ag-grid-react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import axiosConfig from "@utils/axiosConfig";
 import moment from 'moment';
 import BtnRenderer from "@components/agGrid/BtnRenderer";
-import {useSelector} from "react-redux";
-import {ReducerType} from "@src/modules";
+import { useSelector } from "react-redux";
+import { ReducerType } from "@src/modules";
 import withReactContent from "sweetalert2-react-content";
 import Swal from "sweetalert2";
 
@@ -12,7 +12,7 @@ interface ClubMemberListProps {
     clubId: string
 }
 
-interface ClubMember{
+interface ClubMember {
     memberId: number,
     username: string,
     clubAuth: string,
@@ -36,8 +36,8 @@ interface ClubMemberList {
 
 const MySwal = withReactContent(Swal);
 
-const ClubMemberList = (props: ClubMemberListProps) =>{
-    const {clubId} = props;
+const ClubMemberList = (props: ClubMemberListProps) => {
+    const { clubId } = props;
 
     const [error, setError] = useState(null);
 
@@ -58,65 +58,65 @@ const ClubMemberList = (props: ClubMemberListProps) =>{
     }
 
     const [columnDefs, setColumnDefs] = useState([
-    // const columnDefs = [
+        // const columnDefs = [
         {
             headerName: 'NO',
             field: 'no',
-            width:100,
+            width: 100,
             type: 'numericColumn',
-            valueFormatter: (params:any) => {
-                return params.node.rowIndex+1;
+            valueFormatter: (params: any) => {
+                return params.node.rowIndex + 1;
             }
         },
         {
             headerName: '아이디',
             field: 'username',
-            width:150,
+            width: 150,
         },
         {
             headerName: '권한',
             field: 'clubAuth',
-            width:100,
-            editable:true,
+            width: 100,
+            editable: true,
             cellEditor: 'agSelectCellEditor',
             cellEditorParams: {
-                values: codeList.map(value=>value.code)
+                values: codeList.map(value => value.code)
             },
-            valueFormatter: (params:any) => {
-                return codeList.filter(value => params.value===value.code).map(value=>value.value)[0]
+            valueFormatter: (params: any) => {
+                return codeList.filter(value => params.value === value.code).map(value => value.value)[0]
             }
         },
         {
             headerName: '선호(관심)주제',
             field: 'interest',
-            width:180,
+            width: 180,
         },
         {
             headerName: '클럽 가입일',
             field: 'clubJoinDate',
-            type:'dateColumn',
-            width:120,
-            valueFormatter: (params:any) => {
+            type: 'dateColumn',
+            width: 120,
+            valueFormatter: (params: any) => {
                 return moment(params.value).format('YYYY-MM-DD')
             }
         },
         {
             headerName: '세션 참여 횟수',
-            field: 'sessionCnt' ,
-            width:150,
+            field: 'sessionCnt',
+            width: 150,
         },
         {
             headerName: '메일보내기',
             field: 'email',
-            width:150,
+            width: 150,
             cellRenderer: 'btnRenderer',
         },
         {
             headerName: '퇴출',
             field: 'exit',
-            width:150,
+            width: 150,
             cellRenderer: 'btnRenderer',
-            cellRendererParams:(param:any)=>{
+            cellRendererParams: (param: any) => {
                 return {
                     disable: !param.node.data.isEnabled,
                     funcNm: banMember
@@ -124,9 +124,9 @@ const ClubMemberList = (props: ClubMemberListProps) =>{
             }
         },
         {
-            headerName:"memberId",
-            field:'memberId',
-            hide:true
+            headerName: "memberId",
+            field: 'memberId',
+            hide: true
         }
         // ]
     ]);
@@ -140,13 +140,13 @@ const ClubMemberList = (props: ClubMemberListProps) =>{
         updateMemberClubAuth(event.node.data);
     }, []);
 
-    const updateMemberClubAuth = (member:ClubMember) =>{
+    const updateMemberClubAuth = (member: ClubMember) => {
         let memberId = member.memberId;
 
-        axiosConfig.put(`api/v1/bookclub/${clubId}/member`,{
-                memberId: memberId,
-                clubAuth: member.clubAuth,
-            })
+        axiosConfig.put(`api/v1/bookclub/${clubId}/member`, {
+            memberId: memberId,
+            clubAuth: member.clubAuth,
+        })
             .then(function (response) {
                 // success
                 // setMemberList(prevState =>
@@ -169,19 +169,21 @@ const ClubMemberList = (props: ClubMemberListProps) =>{
             });
     }
 
-    const banMember = (member:ClubMember) =>{
+    const banMember = (member: ClubMember) => {
         let memberId = member.memberId;
 
-        axiosConfig.put(`api/v1/bookclub/${clubId}/member/banned`,{
+        axiosConfig.put(`api/v1/bookclub/${clubId}/member/banned`, {
             memberId: memberId
         })
             .then(function (response) {
                 // success
                 setMemberList(prevState =>
                     prevState.map(member => member.memberId === memberId ?
-                            {...member,
-                                clubAuth: response.data.clubAuth,
-                                isEnabled: false} : member));
+                        {
+                            ...member,
+                            clubAuth: response.data.clubAuth,
+                            isEnabled: false
+                        } : member));
 
             })
             .catch(function (error) {
@@ -198,7 +200,7 @@ const ClubMemberList = (props: ClubMemberListProps) =>{
             });
     }
 
-    const getMember = (memberId:number) => {
+    const getMember = (memberId: number) => {
         axiosConfig.get(`api/v1/bookclub/${clubId}/member/${memberId}`)
             .then(function (response) {
                 // success

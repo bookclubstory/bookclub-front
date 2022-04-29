@@ -1,7 +1,7 @@
 import {Container} from "@mui/material";
 import React, {useState} from "react";
-import ClubHeaderEdit from "@components/Bookclub/ClubHeaderEdit";
-import ClubDetailEdit from "@components/Bookclub/ClubDetailEdit";
+import ClubHeaderEdit from "@pages/bookclub/ClubHeaderEdit";
+import ClubDetailEdit from "@pages/bookclub/ClubDetailEdit";
 import axiosConfig from "@utils/axiosConfig";
 import {useNavigate} from "react-router-dom";
 

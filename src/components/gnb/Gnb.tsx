@@ -2,18 +2,7 @@ import React, { useContext, useState, useEffect, MouseEvent } from "react";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch, RootStateOrAny } from "react-redux";
 import { ReducerType, resetStore, initStore } from "@modules/index";
-import {
-  alpha,
-  AppBar,
-  Box,
-  Button,
-  IconButton,
-  InputBase,
-  styled,
-  Tab,
-  Toolbar,
-  Typography,
-} from "@mui/material";
+import { alpha, AppBar, Box, Button, InputBase, styled, Toolbar, Typography, } from "@mui/material";
 import AutoStoriesIcon from "@mui/icons-material/AutoStories";
 import SearchIcon from "@mui/icons-material/Search";
 import SigninBlock from "@components/gnb/SigninBlock";
@@ -107,9 +96,9 @@ const Gnb = (props: any) => {
             <Button
               sx={{ my: 2, color: "white", display: "block" }}
               component={Link}
-              to={"/overview"}
+              to={"/about"}
             >
-              Overview
+              About
             </Button>
             <Button
               sx={{ my: 2, color: "white", display: "block" }}

@@ -1,25 +1,25 @@
-import React, {useEffect, useState} from "react";
-import {Container} from "@mui/material";
-import ClubHeader from "@components/Bookclub/ClubHeader";
+import React, { useEffect, useState } from "react";
+import { Container } from "@mui/material";
+import ClubHeader from "@pages/bookclub/ClubHeader";
 
-import ClubMemberList from "@components/Bookclub/ClubMemberList";
-import ClubMain from "@components/Bookclub/ClubMain";
+import ClubMemberList from "@pages/bookclub/ClubMemberList";
+import ClubMain from "@pages/bookclub/ClubMain";
 import axiosConfig from "@utils/axiosConfig";
 import * as actionOfClubAuth from "@modules/code/actionOfClubAuth";
-import {useDispatch} from "react-redux";
-import ClubDetail from "@components/Bookclub/ClubDetail";
-import {useParams} from "react-router";
+import { useDispatch } from "react-redux";
+import ClubDetail from "@src/pages/bookclub/ClubDetail";
+import { useParams } from "react-router";
 
 const header = {
     clubId: "1",
     clubNm: '공덕역 방구석 철학자들',
     clubLoc: "서울",
     memberCnt: 0,
-    totMemberCnt:0,
-    privateYn:false,
+    totMemberCnt: 0,
+    privateYn: false,
     clubIntro: '혼자선 읽기 힘든 철학서적들 독서 품앗이로 함께 읽어요',
     thumbnail: 'https://source.unsplash.com/random',
-    owner:{
+    owner: {
         username: "Starrything",
         description: "꿈꾸는 개발자"
     }
@@ -31,22 +31,22 @@ interface Bookclub {
         clubNm: string,
         clubLoc: string,
         memberCnt: number,
-        totMemberCnt:number,
-        privateYn:boolean,
+        totMemberCnt: number,
+        privateYn: boolean,
         clubIntro: string,
         thumbnail: string,
-        owner:{
+        owner: {
             username: string,
-            description:string,
+            description: string,
         }
     },
-    main:string,
+    main: string,
     clubId: string,
 }
 
 const Bookclub = (props: any) => {
     const dispatch = useDispatch();
-    const {clubId} = useParams<Bookclub["clubId"]>();
+    const { clubId } = useParams<Bookclub["clubId"]>();
 
     const [main, setMain] = useState<Bookclub["main"]>("")
     const [loading, setLoading] = useState(false);
@@ -58,42 +58,42 @@ const Bookclub = (props: any) => {
     }, []);
 
     const showMain = (bookclub: Bookclub["header"]) => {
-        switch(main){
+        switch (main) {
             case "main":
-                return <ClubDetail clubId = {bookclub.clubId} clubIntro={bookclub.clubIntro} />
+                return <ClubDetail clubId={bookclub.clubId} clubIntro={bookclub.clubIntro} />
                 break;
             case "member":
-                return <ClubMemberList clubId = {bookclub.clubId} />
+                return <ClubMemberList clubId={bookclub.clubId} />
                 break;
             default:
-                return <ClubDetail clubId = {bookclub.clubId} clubIntro={bookclub.clubIntro}/>
+                return <ClubDetail clubId={bookclub.clubId} clubIntro={bookclub.clubIntro} />
         }
     }
 
     const getAuthCodeList = () => {
-        axiosConfig.get("/api/code", {
+        axiosConfig.get("/api/v1/code", {
             params: {
                 code: "CLUB_AUTH",
             },
         })
-        .then(function (response: any) {
-            // success
-            let codeOptions: { code: string; value: string; }[] = [];
-            response.data.forEach((element: { [x: string]: string; }) => {
-                codeOptions.push({
-                    code: element["code"],
-                    value: element["value"],
+            .then(function (response: any) {
+                // success
+                let codeOptions: { code: string; value: string; }[] = [];
+                response.data.forEach((element: { [x: string]: string; }) => {
+                    codeOptions.push({
+                        code: element["code"],
+                        value: element["value"],
+                    });
                 });
+                dispatch(actionOfClubAuth.setClubAuthList(codeOptions));
+                setLoading(true);
+            })
+            .catch(function (error) {
+                // error
+            })
+            .then(function () {
+                // finally
             });
-            dispatch(actionOfClubAuth.setClubAuthList(codeOptions));
-            setLoading(true);
-        })
-        .catch(function (error) {
-            // error
-        })
-        .then(function () {
-            // finally
-        });
     };
 
     const getBookclub = (clubId: any) => {
@@ -110,11 +110,11 @@ const Bookclub = (props: any) => {
     }
 
     return (
-        <Container component="main" sx={{mt:1.5}} >
+        <Container component="main" sx={{ mt: 1.5 }} >
             <ClubHeader header={bookclub} setMain={setMain} />
 
-            {loading&&
-                <ClubMain main={showMain(bookclub)}/>}
+            {loading &&
+                <ClubMain main={showMain(bookclub)} />}
         </Container>
     );
 }

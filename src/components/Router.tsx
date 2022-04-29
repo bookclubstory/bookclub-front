@@ -5,6 +5,7 @@ import Signup from "@pages/login/Signup";
 import Signin from "@pages/login/Signin";
 //import SsoLogin from "@pages/login/SsoLogin";
 import Mainpage from "@components/Mainpage";
+import About from "@components/About";
 import UserList from "@pages/settings/users/UserList";
 import AddUser from "@pages/settings/users/AddUser";
 import EditUser from "@pages/settings/users/EditUser";
@@ -22,6 +23,7 @@ const Router = (props: any) => {
   return (
     <Routes>
       <Route path="/" element={<Mainpage />} />
+      <Route path="/about" element={<About />} />
       <Route path="/login" element={ <Signin />} />
       <Route path="/users/list" element={<UserList />} />
       <Route path="/users/add" element={<AddUser />} />

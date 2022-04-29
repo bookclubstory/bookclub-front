@@ -1,53 +1,88 @@
-import * as React from "react";
-import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
-import CssBaseline from "@mui/material/CssBaseline";
-import TextField from "@mui/material/TextField";
-import Grid from "@mui/material/Grid";
-import Box from "@mui/material/Box";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import Typography from "@mui/material/Typography";
-import Container from "@mui/material/Container";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-import axiosConfig from "@utils/axiosConfig";
+import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import axiosConfig from "@utils/axiosConfig";
+import { Box, Button, Container, CssBaseline, Grid, TextField, Typography, InputLabel, MenuItem, FormControl } from "@mui/material";
+import Select, { SelectChangeEvent } from '@mui/material/Select';
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { MobileDatePicker } from '@mui/x-date-pickers';
 import withReactContent from "sweetalert2-react-content";
 import Swal from "sweetalert2";
+import { ReactJSXElement } from "@emotion/react/types/jsx-namespace";
 
 const MySwal = withReactContent(Swal);
 
-const theme = createTheme();
+const theme = createTheme({
+  typography: {
+    error: {
+      color: 'red',
+    }
+  }
+});
+declare module '@mui/material/styles' {
+  interface TypographyVariants {
+    error: React.CSSProperties;
+  }
 
-interface Signup {
+  // allow configuration using `createTheme`
+  interface TypographyVariantsOptions {
+    error?: React.CSSProperties;
+  }
+}
+
+// Update the Typography's variant prop options
+declare module '@mui/material/Typography' {
+  interface TypographyPropsVariantOverrides {
+    error: true;
+  }
+}
+
+interface Code {
   codeList: [{ code: string; value: string }];
 }
 
 const Signup = (props: any) => {
   useEffect(() => {
     // 컴포넌트 로드시 1번 실행
-    getCodeList();
-    getLocList();
+    getTopicList();
+    getTownList();
   }, []);
 
-  const [codeList, setCodeList] = useState<Signup["codeList"]>([
-    { code: "", value: "" },
-  ]);
-  const [locList, setLocList] = useState<Signup["codeList"]>([
-    { code: "", value: "" },
-  ]);
-
   let navigate = useNavigate();
-  let intFrameHeight = window.innerHeight - 56;
 
+  const passwordErrorText = useRef<HTMLInputElement>(null);
+  const [passwordError, setPasswordError] = useState("");
   const [userinfo, setUserinfo] = useState({
-    name: "",
     email: "",
     password: "",
     confirmPassword: "",
+    firstName: "",
   });
-  const { name, email, password, confirmPassword } = userinfo;
-  const [passwordError, setPasswordError] = useState("");
+  const { email, password, confirmPassword, firstName } = userinfo;
+  const [birthDate, setBirthDate] = useState<Date | null>(new Date());
+  const [topicList, setTopicList] = useState([]);
+  const [topics, setTopics] = React.useState<string[]>([]);
+  const handleChangeTopic = (event: SelectChangeEvent<typeof topics>) => {
+    const {
+      target: { value },
+    } = event;
+    setTopics(
+      // On autofill we get a stringified value.
+      typeof value === 'string' ? value.split(',') : value,
+    );
+  };
+  const [townList, setTownList] = useState([]);
+  const [towns, setTowns] = React.useState<string[]>([]);
+  const handleChangeTown = (event: SelectChangeEvent<typeof towns>) => {
+    const {
+      target: { value },
+    } = event;
+    setTowns(
+      // On autofill we get a stringified value.
+      typeof value === 'string' ? value.split(',') : value,
+    );
+  };
 
   const handleInputChange = (event: any) => {
     const { name, value } = event.target;
@@ -59,10 +94,17 @@ const Signup = (props: any) => {
       if (name === "password") {
         currPassword = value;
         currConfirmPassword = confirmPassword;
+        if(password.length == 0 && confirmPassword.length == 0 && passwordErrorText.current !== null) {
+          passwordErrorText.current.style.display = "none";
+        }
       }
+
       if (name === "confirmPassword") {
         currPassword = password;
         currConfirmPassword = value;
+        if (password.length > 0 && passwordErrorText.current !== null) {
+          passwordErrorText.current.style.display = "block";
+        }
       }
 
       if (currPassword === currConfirmPassword) {
@@ -81,66 +123,20 @@ const Signup = (props: any) => {
     setUserinfo(nextUserinfo);
   };
 
-  /*
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        const data = new FormData(event.currentTarget);
-        // eslint-disable-next-line no-console
-        console.log({
-            email: data.get('email'),
-            password: data.get('password'),
-        });
-    };
-*/
-
-  const register = () => {
-    if (name.length === 0) {
-      return;
-    }
-    if (email.length === 0) {
-      return;
-    }
-    if (password.length === 0 || passwordError.length > 0) {
-      return;
-    }
-
+  const getTopicList = () => {
     axiosConfig
-      .post("/api/user/signup", {
-        username: name,
-        email: email,
-        password: password,
-      })
-      .then(function (response) {
-        // success
-        MySwal.fire({
-          icon: "success",
-          text: "Success!",
-        });
-        navigate("/");
-      })
-      .catch(function (error) {
-        // error
-        //alert("Failed to save this Dataset.");
-        MySwal.fire({
-          icon: "error",
-          text: "Failed to registration.",
-        });
-      })
-      .then(function () {
-        // finally
-      });
-  };
-
-  const getCodeList = () => {
-    axiosConfig
-      .get("/api/code", {
+      .get("/api/v1/code", {
         params: {
           code: "INTEREST_TOPIC",
         },
       })
       .then(function (response) {
         // success
-        setCodeList(response.data);
+        let topics: any = [];
+        response.data.forEach((element: { code: string; value: string; }) => {
+          topics.push(<MenuItem value={element.code}>{element.value}</MenuItem>);
+        });
+        setTopicList(topics);
       })
       .catch(function (error) {
         // error
@@ -150,19 +146,68 @@ const Signup = (props: any) => {
       });
   };
 
-  const getLocList = () => {
+  const getTownList = () => {
     axiosConfig
-      .get("/api/code", {
+      .get("/api/v1/code", {
         params: {
-          code: "INTEREST_LOC",
+          code: "INTEREST_TOWN",
         },
       })
       .then(function (response) {
         // success
-        setLocList(response.data);
+        let towns: any = [];
+        response.data.forEach((element: { code: string; value: string; }) => {
+          towns.push(<MenuItem value={element.code}>{element.value}</MenuItem>);
+        });
+        setTownList(towns);
       })
       .catch(function (error) {
         // error
+      })
+      .then(function () {
+        // finally
+      });
+  };
+
+  const register = () => {
+    if (email.length === 0) {
+      return;
+    }
+    if (password.length === 0 || passwordError.length > 0) {
+      return;
+    }
+    if (firstName.length === 0) {
+      return;
+    }
+
+    axiosConfig
+      .post("/api/v1/user/signup", {
+        email: email,
+        password: password,
+        firstName: firstName,
+        birthDate: birthDate,
+        topics: topics,
+        towns: towns,
+      })
+      .then(function (response) {
+        // success
+        MySwal.fire({
+          icon: "success",
+          title: "Success",
+          text: "환영합니다! 성공적으로 가입되었습니다.",
+        }).then(function(isConfirm) {
+          if(isConfirm) {
+            navigate("/");
+          }
+        });
+      })
+      .catch(function (error) {
+        // error
+        MySwal.fire({
+          icon: "error",
+          title: "Error",
+          text: "회원 가입에 실패하였습니다.",
+        });
       })
       .then(function () {
         // finally
@@ -170,164 +215,136 @@ const Signup = (props: any) => {
   };
 
   return (
-    <ThemeProvider theme={theme}>
-      <Container component="main" maxWidth="xs">
-        <CssBaseline />
-        <Box
-          sx={{
-            marginTop: 8,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-          }}
-        >
-          <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-            <LockOutlinedIcon />
-          </Avatar>
-          <Typography component="h1" variant="h5">
-            회원가입
-          </Typography>
-          <Box component="form" noValidate sx={{ mt: 3 }}>
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  id="email"
-                  label="이메일"
-                  name="email"
-                  autoComplete="email"
-                  autoFocus
-                  value={email}
-                  onChange={handleInputChange}
-                />
+    <LocalizationProvider dateAdapter={AdapterDateFns}>
+      <ThemeProvider theme={theme}>
+        <Container component="main" maxWidth="xs">
+          <CssBaseline />
+          <Box
+            sx={{
+              marginTop: 8,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+          >
+            <Typography component="h1" variant="h3">
+              Please with us!
+            </Typography>
+            <Box component="form" noValidate sx={{ mt: 3 }}>
+              <Grid container spacing={2} textAlign={"left"}>
+                <Grid item xs={12}>
+                  <TextField
+                    required
+                    fullWidth
+                    id="email"
+                    label="Email"
+                    name="email"
+                    autoComplete="email"
+                    autoFocus
+                    value={email}
+                    onChange={handleInputChange}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    required
+                    fullWidth
+                    name="password"
+                    label="Password"
+                    type="password"
+                    id="password"
+                    autoComplete="new-password"
+                    value={password}
+                    onChange={handleInputChange}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    required
+                    fullWidth
+                    name="confirmPassword"
+                    label="Confirm Password"
+                    type="password"
+                    id="confirmPassword"
+                    value={confirmPassword}
+                    onChange={handleInputChange}
+                  />
+                  <Typography variant="error" sx={{ display: "none" }} ref={passwordErrorText}>{passwordError}</Typography>
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    autoComplete="given-name"
+                    name="firstName"
+                    required
+                    fullWidth
+                    id="firstName"
+                    label="First Name"
+                    value={firstName}
+                    onChange={handleInputChange}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <MobileDatePicker
+                    label="Birth Date"
+                    value={birthDate}
+                    inputFormat={"yyyy-MM-dd"}
+                    toolbarFormat={"yyyy-MM-dd"}
+                    onChange={(newBirth) => {
+                      setBirthDate(newBirth);
+                    }}
+                    renderInput={(params) => <TextField id="birth-date" sx={{ width: "100%" }} {...params} />}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                    <FormControl fullWidth>
+                      <InputLabel id="topic-select-label">Topics</InputLabel>
+                      <Select
+                        labelId="topic-select-label"
+                        id="topic-select"
+                        multiple
+                        value={topics}
+                        label="Topic"
+                        onChange={handleChangeTopic}
+                      >
+                        {topicList.map(topic => {
+                          return topic;
+                        })}
+                      </Select>
+                    </FormControl>
+                </Grid>
+                <Grid item xs={12}>
+                    <FormControl fullWidth>
+                      <InputLabel id="town-select-label">Towns</InputLabel>
+                      <Select
+                        labelId="town-select-label"
+                        id="town-select"
+                        multiple
+                        value={towns}
+                        label="Town"
+                        onChange={handleChangeTown}
+                      >
+                        {townList.map(town => {
+                          return town;
+                        })}
+                      </Select>
+                    </FormControl>
+                </Grid>
               </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  name="password"
-                  label="비밀번호"
-                  type="password"
-                  id="password"
-                  autoComplete="new-password"
-                  value={password}
-                  onChange={handleInputChange}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  name="confirmPassword"
-                  label="비밀번호 재확인"
-                  type="password"
-                  id="confirmPassword"
-                  value={confirmPassword}
-                  onChange={handleInputChange}
-                  //autoComplete="new-password"
-                />
-              </Grid>
-
-              <Grid item xs={12}>
-                <TextField
-                  autoComplete="given-name"
-                  name="name"
-                  required
-                  fullWidth
-                  id="name"
-                  label="이름"
-                  value={name}
-                  onChange={handleInputChange}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  id="date"
-                  label="생년월일"
-                  type="date"
-                  defaultValue="2017-05-24"
-                  sx={{ width: "100%" }}
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <div className="mb-3" style={{ paddingTop: "10px" }}>
-                  <label
-                    className="form-label"
-                    htmlFor="name"
-                    style={{ float: "left" }}
-                  >
-                    관심 주제
-                  </label>
-                  <ul className="mylist" style={{ clear: "both" }}>
-                    {codeList.map((code, key) => (
-                      <li key={key}>
-                        <input
-                          type="checkbox"
-                          className="btn-check btn-secondary"
-                          id={code.code}
-                          autoComplete="off"
-                          value={code.code}
-                        />
-                        <label
-                          className="btn btn-sm btn-outline-secondary"
-                          htmlFor={code.code}
-                        >
-                          {code.value}
-                        </label>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-                <div
-                  className="mb-3"
-                  style={{ paddingTop: "15px", clear: "both" }}
-                >
-                  <label
-                    className="form-label"
-                    htmlFor="name"
-                    style={{ float: "left" }}
-                  >
-                    관심 지역
-                  </label>
-                  <ul className="mylist" style={{ clear: "both" }}>
-                    {locList.map((code, key) => (
-                      <li key={key}>
-                        <input
-                          type="checkbox"
-                          className="btn-check btn-secondary"
-                          id={code.code}
-                          autoComplete="off"
-                          value={code.code}
-                        />
-                        <label
-                          className="btn btn-sm btn-outline-secondary"
-                          htmlFor={code.code}
-                        >
-                          {code.value}
-                        </label>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </Grid>
-            </Grid>
-            <Button
-              type="button"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-              onClick={register}
-            >
-              가입하기
-            </Button>
+              <Button
+                type="button"
+                fullWidth
+                variant="contained"
+                sx={{ mt: 3, mb: 2 }}
+                onClick={register}
+              >
+                Sign Up
+              </Button>
+            </Box>
           </Box>
-        </Box>
-      </Container>
-    </ThemeProvider>
+        </Container>
+      </ThemeProvider>
+    </LocalizationProvider>
   );
 };
+
 export default Signup;

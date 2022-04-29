@@ -1,32 +1,16 @@
-import React, {
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import React, { useCallback, useEffect, useRef, useState, } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  Box,
-  Container,
-  IconButton,
-  Tabs,
-  Tab,
-  Modal,
-  Grid,
-  Toolbar,
-  ThemeProvider,
-} from "@mui/material";
-import GridOnIcon from "@mui/icons-material/GridOn";
-import LocalOfferIcon from "@mui/icons-material/LocalOffer";
-import AddCircleOutlinedIcon from "@mui/icons-material/AddCircleOutlined";
-import { createTheme } from "@mui/material/styles";
-import Banner from "@components/Banner";
-import TabPanel from "@components/TabPanel";
 import axiosConfig from "@utils/axiosConfig";
-import BookpostAddModal from "@pages/bookpost/BookpostAddModal";
 import { useSelector, useDispatch, RootStateOrAny } from "react-redux";
 import * as actionOfBookpost from "@modules/bookpost/actionOfBookpost";
-import BookpostItem from "@components/Bookpost/BookpostItem";
+import Banner from "@components/Banner";
+import TabPanel from "@components/TabPanel";
+import { Box, Container, IconButton, Tabs, Tab, Modal, Grid, Toolbar, ThemeProvider, } from "@mui/material";
+import GridOnIcon from "@mui/icons-material/GridOn";
+import AddCircleOutlinedIcon from "@mui/icons-material/AddCircleOutlined";
+import { createTheme } from "@mui/material/styles";
+import BookpostAddModal from "@pages/bookpost/BookpostAddModal";
+import BookpostItem from "@src/pages/bookpost/BookpostItem";
 
 const theme = createTheme({
   components: {
@@ -47,7 +31,8 @@ const banner = {
   imageText: "main image description",
 };
 
-const PAGE_SIZE = 6; //추후 사이즈 변경
+//추후 사이즈 변경
+const PAGE_SIZE = 6;
 
 interface BookpostList {
   content: [
@@ -75,11 +60,8 @@ const BookpostList = (props: any) => {
 
   const [value, setValue] = useState(0);
   const [addModalOpen, setAddModalOpen] = useState(false);
-
   const [error, setError] = useState(null);
-
   const [target, setTarget] = useState<HTMLDivElement | null>(null);
-
   const [postList, setPostList] = useState<BookpostList["content"]>([
     {
       boardId: 0,
@@ -178,7 +160,6 @@ const BookpostList = (props: any) => {
     <ThemeProvider theme={theme}>
       <Container component="main" sx={{ mt: 1.5 }}>
         <Banner banner={banner} />
-
         <Box sx={{ mt: 3 }}>
           <Toolbar>
             <Tabs value={value} onChange={handleChange}>
@@ -188,7 +169,6 @@ const BookpostList = (props: any) => {
                 label="게시물"
                 {...tabProps("tab", 0)}
               />
-              {/*<Tab icon={<LocalOfferIcon/>} iconPosition="start" label="태그됨" {...tabProps("tab",1)}/>*/}
             </Tabs>
             <Box sx={{ flexGrow: 1 }} />
             {loginYn && (
