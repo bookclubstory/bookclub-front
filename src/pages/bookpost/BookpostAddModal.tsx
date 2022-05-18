@@ -69,8 +69,8 @@ const BookpostAddModal = (props: any) => {
     //
     if (event.target.files && event.target.files[0]) {
       setUploadImage(URL.createObjectURL(event.target.files[0]));
-    //   setImageFiles([...imageFIles, event.target.files[0]]);
-    setImageFiles([event.target.files[0]]);
+      //setImageFiles([...imageFiles, event.target.files[0]]);
+      setImageFiles([event.target.files[0]]);
     }
     setDescriptionShow(false);
     setTextAreaShow(true);
@@ -185,7 +185,7 @@ const BookpostAddModal = (props: any) => {
                   minWidth: { md: 350 },
                 }}
               >
-                <img id="target" src={uploadImage} />
+                <img id="target" src={uploadImage} style={{ maxWidth: "100%", maxHeight: "100%" }} />
               </Box>
               <Box
                 sx={{

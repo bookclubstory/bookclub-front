@@ -1,43 +1,72 @@
-import React, {useEffect, useState} from "react";
-import {useNavigate} from "react-router-dom";
-import {Grid, IconButton, ImageListItem, ImageListItemBar} from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Grid, IconButton, ImageListItem, ImageListItemBar } from "@mui/material";
 import PhotoLibraryOutlinedIcon from "@mui/icons-material/PhotoLibraryOutlined";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 import FavoriteOutlinedIcon from "@mui/icons-material/FavoriteOutlined";
 import axiosConfig from "@utils/axiosConfig";
+import { isFunction } from "util";
 
 interface BookpostProps {
-    item:{
+    item: {
         boardId: number,
         postId: string;
         title: string;
+        boardFileId: number;
         rprsImageUrl: string;
 
     };
 }
 
-interface Bookpost{
-    like:{
-        selected:boolean;
-        likeCnt:number;
+interface Bookpost {
+    like: {
+        selected: boolean;
+        likeCnt: number;
     }
 }
 
 const BookpostItem = (props: BookpostProps) => {
+    let navigate = useNavigate();
+    //const loginInfo = JSON.parse(global.localStorage.getItem("loginInfo") || '{}');
+
     const { item } = props;
 
-    let navigate = useNavigate();
-
+    const [securedImageUrl, setSecuredImageUrl] = useState<string>("");
     const [like, setLike] = useState<Bookpost["like"]>(
         {
-            selected:false,
-            likeCnt:0
+            selected: false,
+            likeCnt: 0
         });
 
     useEffect(() => {
         // 컴포넌트 로드시 1번 실행
-        if(item.postId) getBookpostLike(item.postId);
+        if (item.postId) {
+            getBookpostLike(item.postId);
+            setSecureImage(item.rprsImageUrl, item.boardFileId);
+        }
     }, []);
+
+    const setSecureImage = (url: string, boardFileId: number) => {
+        setImageAsBase64(url + "?boardFileId=" + boardFileId, function (data: string) { setSecuredImageUrl(data) });
+    }
+    const setImageAsBase64 = (url: string, successHandler: Function) => {
+        const headers = {};
+        Object.assign(headers, axiosConfig.defaults.headers);
+        axiosConfig
+            .get(url, { headers: headers, responseType: "arraybuffer" })
+            .then(response => {
+                let mimeType = response.headers["content-type"].toLowerCase();
+                //let b64encoded = Buffer.from(response.data, "binary").toString("base64");
+                //let b64encoded = Buffer.from(response.data).toString("base64");
+                console.log(response.data);
+                let b64encoded = window.btoa(response.data);
+                let prefix = "data:" + mimeType + ";base64,";
+                successHandler(prefix + b64encoded);
+            })
+            .then(error => {
+                // errorHandler
+            });
+    }
 
     const moveToBookpost = (postId: string) => {
         navigate(`/bookpost/list/${postId}`, { replace: true });
@@ -49,7 +78,7 @@ const BookpostItem = (props: BookpostProps) => {
             "https://images.unsplash.com/photo-1444418776041-9c7e33cc5a9c";
     };
 
-    const handleClick = (postId: string) =>{
+    const handleClick = (postId: string) => {
         updateLike(postId);
     }
 
@@ -68,7 +97,7 @@ const BookpostItem = (props: BookpostProps) => {
             });
     }
 
-    const updateLike = (postId:string) =>{
+    const updateLike = (postId: string) => {
         axiosConfig
             .post(`/api/v1/bookpost/like/${postId}`)
             .then(function (response: any) {
@@ -90,11 +119,12 @@ const BookpostItem = (props: BookpostProps) => {
                 key={item.postId}
             >
                 <img
-                    src={`${item.rprsImageUrl}?auto=format`}
-                    srcSet={`${item.rprsImageUrl}?auto=format&dpr=2 2x`}
+                    //src={`${item.rprsImageUrl}?auto=format`}
+                    //srcSet={`${item.rprsImageUrl}?auto=format&dpr=2 2x`}
+                    src={securedImageUrl}
                     alt={item.title}
                     loading="lazy"
-                    onError={handleImgError}
+                    //onError={handleImgError}
                 />
                 <ImageListItemBar
                     sx={{
@@ -106,10 +136,10 @@ const BookpostItem = (props: BookpostProps) => {
                     position="top"
                     actionIcon={
                         <IconButton
-                            sx={{color: "white"}}
+                            sx={{ color: "white" }}
                             aria-label={`${item.title}`}
                         >
-                            <PhotoLibraryOutlinedIcon/>
+                            <PhotoLibraryOutlinedIcon />
                         </IconButton>
                     }
                     actionPosition="right"
@@ -119,11 +149,11 @@ const BookpostItem = (props: BookpostProps) => {
                     position="bottom"
                     actionIcon={
                         <IconButton
-                            sx={{color: "white"}}
-                            onClick={() =>handleClick(item.postId)}
+                            sx={{ color: "white" }}
+                            onClick={() => handleClick(item.postId)}
                         >
                             {like.likeCnt}
-                            {like.selected?<FavoriteOutlinedIcon/>:<FavoriteBorderOutlinedIcon/>}
+                            {like.selected ? <FavoriteOutlinedIcon /> : <FavoriteBorderOutlinedIcon />}
                         </IconButton>
                     }
                     actionPosition="right"

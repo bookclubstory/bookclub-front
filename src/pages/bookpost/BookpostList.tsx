@@ -40,6 +40,7 @@ interface BookpostList {
       boardId: number;
       postId: string;
       title: string;
+      boardFileId: number;
       rprsImageUrl: string;
     }
   ];
@@ -67,6 +68,7 @@ const BookpostList = (props: any) => {
       boardId: 0,
       postId: "",
       title: "",
+      boardFileId: 0,
       rprsImageUrl: "",
     },
   ]);
@@ -193,7 +195,7 @@ const BookpostList = (props: any) => {
         <TabPanel name="tab" index={0} value={value}>
           <Grid container spacing={1}>
             {!error &&
-              postList.map((item) => (<BookpostItem key={item.postId} item={item}/>))}
+              postList.map((item) => (<BookpostItem key={item.postId} item={item} />))}
           </Grid>
         </TabPanel>
 

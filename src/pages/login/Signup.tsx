@@ -197,7 +197,7 @@ const Signup = (props: any) => {
           text: "환영합니다! 성공적으로 가입되었습니다.",
         }).then(function(isConfirm) {
           if(isConfirm) {
-            navigate("/");
+            navigate("/login");
           }
         });
       })
